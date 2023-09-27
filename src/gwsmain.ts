@@ -75,6 +75,7 @@ export class GWSMain {
             } )
             .then(blob => {
                 const file = window.URL.createObjectURL(blob);
+                console.log(file);
                 window.location.assign(file);
             })
             .catch((err) => {
