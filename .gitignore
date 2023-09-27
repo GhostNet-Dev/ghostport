@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 .vscode
+*.db
+*.db.lock
+GhostWebService*
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -103,3 +106,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+#binary
+GhostWebService-linux

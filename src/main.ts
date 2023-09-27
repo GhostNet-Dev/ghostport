@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"; // ES import 
+import { app, BrowserWindow, ipcMain, nativeTheme } from "electron"; // ES import 
 import * as ioutil from "./filemanager/ioutills";
 import * as path from "path";
 
@@ -16,13 +16,17 @@ app.on("ready", () => {
     },
   });
 
+  nativeTheme.themeSource = 'dark';
   window.webContents.openDevTools()
   window.loadFile("index.html");
 
   ipcMain.on('checkbin', (evt) => {
-    const ret = ioutil.fileExist("./gws-linux")
-    // replyInputValue 송신 또는 응답
+    const ret = ioutil.fileExist("./GhostWebService-windows.exe")
     evt.reply('reply_checkbin', ret);
+  })
+  
+  ipcMain.on('download', (evt, url: string) => {
+    ioutil.filedownload(evt, url, "GhostWebService-windows.exe")
   })
 });
 

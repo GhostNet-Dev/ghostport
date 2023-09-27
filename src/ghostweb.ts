@@ -1,13 +1,16 @@
 import "module-alias/register"
-import { BlockInfo } from "@src/blockinfo.js";
-import { TxInfo } from "@src/txinfo.js";
-import { BlockStore } from "@src/store.js";
-import { TxDetail } from "@src/txdetail.js";
-import { GWSMain } from "@src/gwsmain.js";
-import { AccountDetail } from "@src/accountdetail.js";
-import { GhostWebUser } from "@src/models/param.js";
+import { BlockInfo } from "@src/blockinfo";
+import { TxInfo } from "@src/txinfo";
+import { BlockStore } from "@src/store";
+import { TxDetail } from "@src/txdetail";
+import { GWSMain } from "@src/gwsmain";
+import { Login } from "@src/login";
+import { AccountDetail } from "@src/accountdetail";
+import { GhostWebUser } from "@src/models/param";
+import { Session } from "@src/models/session";
 
 const blockStore = new BlockStore();
+const session = new Session();
 
 interface IPage {
     Run(str: string): boolean; 
@@ -21,7 +24,6 @@ declare global {
         ClickLoadPage: (key: string, from: boolean, ...arg: string[]) => void;
         NavExpended: () => void;
         MasterAddr: string;
-        MasterNodes: GhostWebUser[];
         MasterNode: GhostWebUser;
         NodeCount: number;
     }
@@ -29,6 +31,7 @@ declare global {
 
 const funcMap: FuncMap = {
     "main": new GWSMain(blockStore),
+    "login": new Login(blockStore, session),
     "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
     "blockscan": new BlockInfo(blockStore),
@@ -37,6 +40,7 @@ const funcMap: FuncMap = {
 
 const urlToFileMap: UrlMap = {
     "main": "./layouts/main.html",
+    "login": "./layouts/login.html",
     "nft": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "download": "http://ghostwebservice.com/ghostnetservice/download.html",
@@ -104,7 +108,7 @@ window.onpopstate = (event) => {
 
 const parseResponse = (nodes: GhostWebUser[]) => {
     let randIdx = Math.floor(Math.random() * nodes.length);
-    window.MasterNodes = nodes;
+    blockStore.AddMasters(nodes);
     window.NodeCount = nodes.length;
     console.log(nodes);
     return nodes[randIdx];

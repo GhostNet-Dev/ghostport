@@ -1,6 +1,5 @@
 import { ipcRenderer } from "electron"; // ES import 
-import { elapsedTime, calcGCoin } from "./utils.js";
-import { AccountParam, BlockInfoParam } from "./models/param.js";
+import { AccountParam, BlockInfoParam, GhostWebUser } from "./models/param.js";
 import { BlockStore } from "./store.js";
 
 const MaxInfoViewCnt = 5;
@@ -24,10 +23,30 @@ export class GWSMain {
             if (bodyTag == null) return;
 
             if (payload == false) {
-                bodyTag.innerHTML = "실행파일이 존재하지 않습니다 ."
+                bodyTag.innerHTML = "The GhostNet Deamon does not exist."
                 console.log("request file to server");
-            }
+                return;
+            } 
+            bodyTag.innerHTML = "Ready to get started"
+            this.drawHtmlStart();
         });
+        ipcRenderer.on('reply_download', (evt, ret: boolean) => {
+            const bodyTag = document.getElementById('checkfile');
+            if (bodyTag == null) return;
+            bodyTag.innerHTML = (ret) ? "Complete" : "Connection failed.";
+            
+            const btn = document.getElementById("downloadBtn") as HTMLButtonElement
+            btn.disabled = false;
+            this.drawHtmlStart();
+        });
+    }
+    drawHtmlStart() {
+        const startTag = document.getElementById('startbtn');
+        if (startTag == null) return;
+        startTag.innerHTML = `
+                    <button type="submit" class="btn  btn-primary" 
+                    onclick="ClickLoadPage('login', false)">Start</button>
+                `;
     }
 
     init() {
@@ -37,50 +56,17 @@ export class GWSMain {
         ipcRenderer.send('checkbin');
     }
 
-    sendToModel() {
-        const btn = document.getElementById("ghostchat") as HTMLButtonElement
-        if (btn == null) return;
-        const result = document.getElementById("gptresult")
-        if (result == null) return;
-        const input = document.getElementById("prompt") as HTMLInputElement
-        const prompt = input?.value;
-        result.innerHTML = `<div class="spinner-grow" role="status">
-            <span class="sr-only">Loading...</span> </div> `
-        btn.disabled = true;
-        return fetch(`http://220.149.235.237:8001/prompt/${prompt}`)
-            .then((response) => response.json())
-            .then((text)=>{
-                console.log(text);
-                if ("message" in text){
-                    result.innerHTML = text.message;
-                } else {
-                    result.innerHTML = text.detail+" - 개발자가 뭔가 하고 있나봅니다...";
-                }
-                btn.disabled = false;
-            })
-            .catch(()=>{
-                result.innerHTML = "개발자가 뭔가 하고 있나봅니다...";
-            });
-    }
-    downloadProgram(url: string) {
+    downloadProgram() {
         const bodyTag = document.getElementById('checkfile');
         if (bodyTag == null) return;
+        const btn = document.getElementById("downloadBtn") as HTMLButtonElement
+        btn.disabled = true;
 
-        return fetch(url + "/download")
-            .then((response) =>{
-                if (!response.ok) {
-                    throw new Error(response.statusText);
-                }
-                return response.blob();
-            } )
-            .then(blob => {
-                const file = window.URL.createObjectURL(blob);
-                console.log(file);
-                window.location.assign(file);
-            })
-            .catch((err) => {
-                bodyTag.innerHTML = `Connection failed. - ${err}`;
-            });
+        const url = window.MasterAddr + "/download";
+        console.log(url)
+        ipcRenderer.send('download', url);
+        bodyTag.innerHTML = `<div class="spinner-grow" role="status">
+            <span class="sr-only">Loading...</span> </div> `
     }
     connectServer() {
         const result = document.getElementById("connectResult")
@@ -89,20 +75,47 @@ export class GWSMain {
         const addr = input?.value;
         return fetch(addr + "/check")
             .then((response) => response.json())
-            .catch(()=>{
+            .catch(() => {
                 result.innerHTML = "Connection failed.";
             });
     }
+    selectMasterNode(node: GhostWebUser) {
+        const tag = document.getElementById("selectMaster")
+        if (tag == null) return false;
+        window.MasterNode = node;
+        window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
+        console.log(window.MasterNode);
+        tag.innerHTML = window.MasterNode.User.Nickname;
+    }
+
+    updateMasterNodeList() {
+        const tag = document.getElementById("masterlist")
+        if (tag == null) return;
+        tag.innerHTML = "";
+        const nodes = this.blockStore.GetMasters();
+        nodes.forEach(node => {
+            const button = document.createElement('button');
+            button.setAttribute('class', 'dropdown-item');
+            button.onclick = () => this.selectMasterNode(node);
+            button.innerText = node.User.Nickname;
+            tag.appendChild(button);
+        })
+    }
+
     public Run(masterAddr: string): boolean {
         this.init();
+        const tag = document.getElementById("selectMaster")
+        if (tag == null) return false;
+        tag.innerHTML = window.MasterNode.User.Nickname;
 
 
         const btn = document.getElementById("downloadBtn") as HTMLButtonElement
-        btn.onclick = () => this.downloadProgram(masterAddr);
+        btn.onclick = () => this.downloadProgram();
 
         const coBtn = document.getElementById("connectBtn") as HTMLButtonElement
         coBtn.onclick = () => this.connectServer();
 
+        this.updateMasterNodeList();
         return true;
     }
     public Release(): void { }
