@@ -21,6 +21,7 @@ declare global {
         ClickLoadPage: (key: string, from: boolean, ...arg: string[]) => void;
         NavExpended: () => void;
         MasterAddr: string;
+        MasterNodes: GhostWebUser[];
         MasterNode: GhostWebUser;
         NodeCount: number;
     }
@@ -35,7 +36,7 @@ const funcMap: FuncMap = {
 };
 
 const urlToFileMap: UrlMap = {
-    "main": "http://ghostwebservice.com/ghostnetservice/main.html",
+    "main": "./layouts/main.html",
     "nft": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "download": "http://ghostwebservice.com/ghostnetservice/download.html",
@@ -103,6 +104,7 @@ window.onpopstate = (event) => {
 
 const parseResponse = (nodes: GhostWebUser[]) => {
     let randIdx = Math.floor(Math.random() * nodes.length);
+    window.MasterNodes = nodes;
     window.NodeCount = nodes.length;
     console.log(nodes);
     return nodes[randIdx];

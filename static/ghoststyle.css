@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+a, a:hover, a:focus {
+    text-decoration: none;
+    color: inherit;
+}
+.division-line {
+  border-bottom: 1px solid silver;
+  margin: 0px;
+}
+header {
+    display: flex;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.menubar {
+    background-color: #1f1b24 !important;
+    display: flex;
+    flex-basis: auto;
+    margin-right:auto;
+    color: #fff;
+    padding-left: 0;
+    margin-bottom: 0;
+    align-items: center;
+}
+.menubar-container {
+    align-items: center;
+}
+.menubar-logo {
+    padding:0;
+    margin-right: 0.5em;
+}
+.menubar-brand {
+    color: #fff;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.3125rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-right: 0rem;
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+    align-items: center;
+}
+.menubar-toggler {
+    border:2px;
+    border-color: #fff;
+    border-radius: 1em;
+    padding-left: 1rem;
+    font-size:1.5em;
+    width: 50px;
+    clear:left;
+}
+
+.menubar-container,
+.menubar-brand,
+.menubar-toggler,
+.menubar-nav, 
+.menubar-nav-right {
+    flex: 0 0 auto;
+}
+
+.menubar-nav-right {
+    margin-right: 1em;
+    margin-left:auto;
+}
+
+.menubar-items {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    list-style-type: none;
+}
+.menubar-item{
+    flex: 1 1 auto;
+    text-align: center;
+    padding-left: 1em;
+}
+.menubar-link a:link {
+    color: inherit;
+}
+
+.input-set {
+    max-width: 220px;
+    padding-right:1em;
+}
+
+.input-set input {
+    margin-bottom: 0;
+    border-radius: 5px;
+    width: 100%;
+    padding: 0.5em;
+    margin: 0.5em;
+    border: 1px;
+    opacity: 0.7;
+}
+
+.input-set input[type=text]::placeholder {
+    font-family: 'Material Icons Outlined';
+    font-size: 1.5em;
+    transform: translateY(5px);
+}
+.handcursor {
+    cursor: pointer;
+}
+.maxtext{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.flow-text {
+    display: flex;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: 0.3s;
+    width: 100%;
+}
+.flow-text:hover .flow-wrap {
+    animation-play-state: paused;
+    cursor: pointer;
+}
+.flow-text .track {
+    animation: textLoop 60s linear infinite;
+    padding-right: 1.4881vw;
+}
+@keyframes textLoop{
+    0% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}

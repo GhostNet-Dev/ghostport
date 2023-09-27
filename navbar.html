@@ -1,36 +1,33 @@
-<!-- 네비게이션바 -->
-<nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
-<div class="container">
-    <div class="menubar-logo">
-        <img src="http://ghostwebservice.com/static/img/ghost_background_black@1x.png" width="40">
-    </div>
-    <a class="navbar-brand handcursor" onclick="ClickLoadPage('main', false)">
-        <b>GhostWebService</b></a>
-    <div class="material-icons navbar-toggler ml-auto"><a href="javascript:void(0)" onclick="NavExpended()">menu</a></div>
-    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-                <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">Blockchain ▾</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="javascript:void(0)" onclick="ClickLoadPage('blockscan', true)">Block List</a>
-                    <a class="dropdown-item" href="javascript:void(0)" onclick="ClickLoadPage('download', true)">Download</a>
-                </div>
-            </li>
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
-                    onclick="ClickLoadPage('nft', true)">NFT</a> </li>
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
-                    onclick="ClickLoadPage('prompt', true)">Prompt</a> </li>
-
-        </ul>
-    </div>
-    <div class="collapse navbar-collapse flex-grow-0" style="margin-left:auto;" id="navbarNavRight">
-        <ul class="navbar-nav" id="sessioninfo">
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('signin', true)">Sign
-                    In</a> </li>
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('signup', true)">Sign
-                    Up</a> </li>
-        </ul>
-    </div>
-    </div>
-</nav>
+<div class="d-flex flex-column flex-shrink-0 border-right" style="width: 4rem;">
+    <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip"
+        data-bs-placement="right" data-bs-original-title="Icon-only">
+        <img src="http://ghostwebservice.com/static/img/ghost_background_black@1x.png" width="35">
+        <span class="visually-hidden">Icon-only</span></a>
+    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+        <li class="nav-item">
+            <a class="nav-link active py-3 handcursor" aria-current="page">
+                <span class="material-symbols-outlined"> home </span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link py-3 handcursor">
+                <span class="material-symbols-outlined"> dashboard </span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link py-3 handcursor">
+                <span class="material-symbols-outlined"> image </span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link py-3 handcursor">
+                <span class="material-symbols-outlined"> chat </span>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link py-3 handcursor">
+                <span class="material-symbols-outlined"> manage_accounts </span>
+            </a>
+        </li>
+    </ul>
+</div>
