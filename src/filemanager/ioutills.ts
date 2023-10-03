@@ -1,7 +1,7 @@
 import * as http from "http"
 import * as fs from "fs";
 
-const filedownload = (evt: Electron.IpcMainEvent, masterAddr: string, filename: string) => {
+const filedownload = (masterAddr: string, filename: string, callback :Function) => {
     const file = fs.createWriteStream(filename);
     const url = masterAddr;
     const request = http.get(url, function (response) {
@@ -12,10 +12,10 @@ const filedownload = (evt: Electron.IpcMainEvent, masterAddr: string, filename: 
         file.on("finish", () => {
             file.close();
             console.log("Download Completed");
-            evt.reply('reply_download', true);
+            callback(true);
         });
     }).on('error', err =>{
-        evt.reply('reply_download', false);
+        callback(false);
     });
     //console.log(request);
 }

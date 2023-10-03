@@ -1,31 +1,31 @@
 <div class="d-flex flex-column flex-shrink-0 border-right" style="width: 4rem;">
-    <a href="/" class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip"
+    <a class="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip"
         data-bs-placement="right" data-bs-original-title="Icon-only">
         <img src="http://ghostwebservice.com/static/img/ghost_background_black@1x.png" width="35">
         <span class="visually-hidden">Icon-only</span></a>
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
         <li class="nav-item">
-            <a class="nav-link active py-3 handcursor" aria-current="page">
+            <a id="nav-dashboard" class="nav-link active py-3 handcursor"  onclick="ClickLoadPage('dashboard', true)" aria-current="page">
                 <span class="material-symbols-outlined"> home </span>
             </a>
         </li>
         <li>
-            <a class="nav-link py-3 handcursor" onclick="ClickLoadPage('blockscan', true)">
+            <a id="nav-blockscan" class="nav-link py-3 handcursor" onclick="ClickLoadPage('blockscan', true)">
                 <span class="material-symbols-outlined"> dashboard </span>
             </a>
         </li>
         <li>
-            <a class="nav-link py-3 handcursor">
+            <a id="nav-image" class="nav-link py-3 handcursor">
                 <span class="material-symbols-outlined"> image </span>
             </a>
         </li>
         <li>
-            <a class="nav-link py-3 handcursor">
+            <a id="nav-chat" class="nav-link py-3 handcursor">
                 <span class="material-symbols-outlined"> chat </span>
             </a>
         </li>
         <li>
-            <a class="nav-link py-3 handcursor">
+            <a id="nav-account" class="nav-link py-3 handcursor">
                 <span class="material-symbols-outlined"> manage_accounts </span>
             </a>
         </li>

@@ -27,7 +27,7 @@
                     <div class="row m-3 text-center" id="checkfile">
                     </div>
                     <div class="row m-3 text-center" id="startbtn">
-                    <button type="submit" id="downloadBtn" class="btn btn-primary">Download</button>
+                        <button type="submit" id="downloadBtn" class="btn btn-primary">Download</button>
                     </div>
                 </div>
             </div>
@@ -37,9 +37,14 @@
     </div>
     <div class="row">
         <div class="col-2"></div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header font-weight-bold">원격 접속하기</div>
+        <div class="col text-center">
+            <button id="remoteBtn" class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                원격 접속하기
+            </button>
+            <br> <br>
+
+            <div class="card" id="remoteLayer">
                 <div class="card-body p-2">
 
                     <div class="row m-3">
@@ -51,12 +56,13 @@
                     <div class="row m-3 text-center" id="connectResult">
                     </div>
                     <div class="row m-3">
-                    <button type="submit" id="connectBtn" class="btn btn-primary">Connect</button>
+                        <button type="submit" id="connectBtn" class="btn btn-primary">Connect</button>
                     </div>
                 </div>
             </div>
-            <br>
         </div>
+        <br>
         <div class="col-2"></div>
     </div>
+</div>
 </div>

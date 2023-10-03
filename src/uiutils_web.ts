@@ -1,5 +1,7 @@
-import "module-alias/register"
-import { includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/ghostweb.js";
+import { includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "./ghostweb.js";
+
+includeHTML("header", "navbar.html");
+includeHTML("footer", "foot.html");
 
 addEventListener("load", () =>
     fetch("http://ghostnetroot.com:58080/nodes")
@@ -7,8 +9,3 @@ addEventListener("load", () =>
         .then(parseResponse)
         .then(loadNodesHtml)
         .then((url) => includeContentHTML(url)));
-
-
-
-includeHTML("header", "navbar.html");
-includeHTML("footer", "foot.html");

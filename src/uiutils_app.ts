@@ -1,0 +1,13 @@
+import "module-alias/register"
+import { OpenTerminal, includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/ghostapp.js";
+
+includeHTML("header", "navbar.html");
+includeHTML("footer", "foot.html");
+
+addEventListener("load", () =>
+    fetch("http://ghostnetroot.com:58080/nodes")
+        .then((response) => response.json())
+        .then(parseResponse)
+        .then(loadNodesHtml)
+        .then((url) => includeContentHTML(url))
+        .then(OpenTerminal));

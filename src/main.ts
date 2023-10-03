@@ -20,13 +20,19 @@ app.on("ready", () => {
   window.webContents.openDevTools()
   window.loadFile("index.html");
 
-  ipcMain.on('checkbin', (evt) => {
-    const ret = ioutil.fileExist("./GhostWebService-windows.exe")
+  ipcMain.on('checkbin', (evt, filename: string) => {
+    const ret = ioutil.fileExist(`./${filename}`)
     evt.reply('reply_checkbin', ret);
   })
   
-  ipcMain.on('download', (evt, url: string) => {
-    ioutil.filedownload(evt, url, "GhostWebService-windows.exe")
+  ipcMain.on('download', (evt, url: string, filename: string) => {
+    ioutil.filedownload(url, filename, (ret: boolean)=> {
+      if (ret) {
+            evt.reply('reply_download', true);
+      } else {
+        evt.reply('reply_download', false);
+      }
+    })
   })
 });
 

@@ -129,4 +129,5 @@ function SHA256(s: string) :any{
     return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
 
 }
-export {SHA256}
+
+export { SHA256 }
