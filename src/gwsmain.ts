@@ -1,7 +1,7 @@
-import { ipcRenderer } from "electron"; // ES import 
-import { AccountParam, BlockInfoParam, GhostWebUser } from "./models/param";
-import { BlockStore } from "./store";
-import { GetPublicIp } from "./libs/getpublicip";
+import { BlockInfoParam, GhostWebUser } from "./models/param.js";
+import { BlockStore } from "./store.js";
+import { GetPublicIp } from "./libs/getpublicip.js";
+import { Channel } from "./models/com.js";
 
 const MaxInfoViewCnt = 5;
 
@@ -14,21 +14,19 @@ export class GWSMain {
     m_curGetherTx: number;
     m_filename: string;
     m_publicIp: string;
+    m_ipc: Channel;
 
-    public constructor(private blockStore: BlockStore) {
+    public constructor(private blockStore: BlockStore, ipc: Channel) {
         this.m_blockStore = blockStore;
         this.m_maxBlockId = 0;
         this.m_curGetherTx = 0;
         this.m_publicIp = this.m_filename = "";
         this.m_blockInfos = new Array<BlockInfoParam>();
+        this.m_ipc = ipc;
 
-        GetPublicIp((ip: string) => {
-            console.log(ip)
-            this.m_publicIp = ip;
-            this.m_blockStore.SetPublicIp(ip);
-        });
+        
 
-        ipcRenderer.on('reply_checkbin', (evt, payload: boolean) => {
+        ipc.RegisterMsgHandler('reply_checkbin', (payload: boolean) => {
             const bodyTag = document.getElementById('checkfile');
             if (bodyTag == null) return;
 
@@ -40,7 +38,7 @@ export class GWSMain {
             bodyTag.innerHTML = "Ready to get started"
             this.drawHtmlStart();
         });
-        ipcRenderer.on('reply_download', (evt, ret: boolean) => {
+        ipc.RegisterMsgHandler('reply_download', (ret: boolean) => {
             const bodyTag = document.getElementById('checkfile');
             if (bodyTag == null) return;
             bodyTag.innerHTML = (ret) ? "Complete" : "Connection failed.";
@@ -73,7 +71,7 @@ export class GWSMain {
                 console.log(info);
                 this.m_filename = "GhostWebService-windows-" + info.BuildDate + ".exe"
                 this.m_blockStore.SetGWSPath(this.m_filename);
-                ipcRenderer.send('checkbin', this.m_filename);
+                this.m_ipc.SendMsg('checkbin', this.m_filename);
             })
     }
 
@@ -85,7 +83,7 @@ export class GWSMain {
 
         const url = window.MasterAddr + "/download";
         console.log(url)
-        ipcRenderer.send('download', url, this.m_filename);
+        this.m_ipc.SendMsg('download', url, this.m_filename);
         bodyTag.innerHTML = `<div class="spinner-grow" role="status">
             <span class="sr-only"></span> </div> `
     }

@@ -1,5 +1,5 @@
 import "module-alias/register"
-import { OpenTerminal, includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/ghostapp.js";
+import { factory, includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/ghostapp.js";
 
 includeHTML("header", "navbar.html");
 includeHTML("footer", "foot.html");
@@ -10,4 +10,4 @@ addEventListener("load", () =>
         .then(parseResponse)
         .then(loadNodesHtml)
         .then((url) => includeContentHTML(url))
-        .then(OpenTerminal));
+        .then(() => factory.OpenTerminal()));

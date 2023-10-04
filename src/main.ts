@@ -1,8 +1,15 @@
 import { app, BrowserWindow, ipcMain, nativeTheme } from "electron"; // ES import 
 import * as ioutil from "./filemanager/ioutills";
+import * as gwsprocess from "./app/process";
 import * as path from "path";
+import { GetPublicIp } from "./libs/getpublicip";
 
-let window;
+let window: BrowserWindow;
+let g_ip: string;
+GetPublicIp((ip: string) => {
+            console.log(ip);
+            g_ip = ip;
+        });
 
 app.on("ready", () => {
   window = new BrowserWindow({
@@ -34,7 +41,25 @@ app.on("ready", () => {
       }
     })
   })
+
+  ipcMain.on('executeProcess', (evt, gwsPath: string, id: string, pw: string, port: string) => {
+    gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, (code: number) => {
+      window.webContents.send('executeProcessExit', true);
+    },(data: any) => {
+      window.webContents.send('gwsout', data);
+    },(data: any) => {
+      window.webContents.send('gwserr', data);
+    })
+  });
+
+  ipcMain.on('createProcess', (evt, gwsPath: string, id: string, pw: string, port: string) => {
+    gwsprocess.CreateAccount(gwsPath, id, pw, g_ip, port, () => {
+      evt.reply('createProcessExit', true);
+    })
+  });
 });
+
+
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

@@ -1,23 +1,9 @@
-import { BlockInfo } from "./blockinfo.js";
-import { TxInfo } from "./txinfo.js";
-import { BlockStore } from "./store.js";
-import { TxDetail } from "./txdetail.js";
-import { GWSMain } from "./gwsmain.js";
-import { Login } from "./login.js";
-import { AccountDetail } from "./accountdetail.js";
+import { WebFactory } from "./factory/webfactory.js";
 import { GhostWebUser } from "./models/param.js";
-import { Session } from "./models/session.js";
-import { Dashboard } from "./dashboard.js";
 
-const blockStore = new BlockStore();
-const session = new Session(blockStore, null);
+export const factory = new WebFactory();
+const blockStore = factory.GetBlockStore();
 
-interface IPage {
-    Run(str: string): boolean; 
-    Release(): void;
-}
-
-type FuncMap = { [key: string]: IPage };
 type UrlMap = { [key: string]: string; };
 declare global {
     interface Window {
@@ -28,15 +14,7 @@ declare global {
     }
 }
 
-const funcMap: FuncMap = {
-    "main": new GWSMain(blockStore),
-    "login": new Login(blockStore, session),
-    "dashboard": new Dashboard(blockStore, session),
-    "txdetail": new TxDetail(blockStore),
-    "blockdetail": new TxInfo(blockStore),
-    "blockscan": new BlockInfo(blockStore),
-    "accountdetail": new AccountDetail(blockStore),
-};
+const funcMap = factory.Build();
 
 const urlToFileMap: UrlMap = {
     "main": "./layouts/main.html",

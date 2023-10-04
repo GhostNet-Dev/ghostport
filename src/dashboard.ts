@@ -10,6 +10,9 @@ export class Dashboard {
     }
 
     public Run(masterAddr: string): boolean {
+        if (!this.m_session.CheckLogin()) {
+            window.ClickLoadPage("main", false);
+        }
 
         return true;
     }

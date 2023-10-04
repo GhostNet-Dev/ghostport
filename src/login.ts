@@ -1,16 +1,25 @@
-import { BlockStore } from "./store";
-import { Session } from "./models/session";
-import { spawn } from "child_process";
+import { BlockStore } from "./store.js";
+import { Session } from "./models/session.js";
+import { Channel } from "./models/com.js";
 
 export class Login {
     m_session: Session
     m_blockStore:BlockStore;
     m_id: string;
     m_pw: string
-    public constructor(private blockStore: BlockStore, sessions: Session) {
+    m_ipc: Channel;
+
+    public constructor(private blockStore: BlockStore, sessions: Session, ipc: Channel) {
         this.m_session = sessions;
         this.m_blockStore = blockStore;
         this.m_id = this.m_pw = "";
+        this.m_ipc = ipc;
+            
+        ipc.RegisterMsgHandler('createProcessExit', () => {
+            const btn = document.getElementById("createBtn") as HTMLButtonElement
+            btn.disabled = false;
+            this.drawHtmlLoading(false);
+        });
     }
 
     //https://www.freecodecamp.org/korean/news/node-js-child-processes-everything-you-need-to-know-e69498fe970a/
@@ -19,26 +28,8 @@ export class Login {
         const btn = document.getElementById("createBtn") as HTMLButtonElement
         btn.disabled = true;
         this.drawHtmlLoading(true);
-
-        const gws = spawn('./' + this.m_blockStore.GetGWSPath(), 
-            ['create', '-u', this.m_id, '-p', this.m_pw, 
-            '--ip', this.m_blockStore.GetPublicIp(), 
-            '--port', '50129'])
-
-        const thisObj = this;
-        gws.on('exit', function(code, signal) {
-            console.log('child process exited with ' +
-              `code ${code} and signal ${signal}`)
-            btn.disabled = false;
-            thisObj.drawHtmlLoading(false);
-        })
-
-        gws.stdout.on('data', data => {
-            console.log(`child stdout: ${data}`);
-        })
-        gws.stderr.on('data', data => {
-            console.log(`child stderr: ${data}`);
-        })
+        this.m_ipc.SendMsg('createProcess', './' + this.m_blockStore.GetGWSPath(),
+            this.m_id, this.m_pw, '50129');
     }
     login() {
         if (!this.checkInputData()) return;

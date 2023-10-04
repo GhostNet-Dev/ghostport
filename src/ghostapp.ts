@@ -1,46 +1,10 @@
 import "module-alias/register"
-import { BlockInfo } from "@src/blockinfo";
-import { TxInfo } from "@src/txinfo";
-import { BlockStore } from "@src/store";
-import { TxDetail } from "@src/txdetail";
-import { GWSMain } from "@src/gwsmain";
-import { Login } from "@src/login";
-import { AccountDetail } from "@src/accountdetail";
+import { AppFactory } from "@src/factory/appfactory";
 import { GhostWebUser } from "@src/models/param";
-import { Session } from "@src/models/session";
-import { Dashboard } from "@src/dashboard";
-import { Terminal } from "xterm";
-import { FitAddon } from 'xterm-addon-fit';
-import { WebLinksAddon } from 'xterm-addon-web-links';
 
-const term = new Terminal({ 
-    convertEol: true, 
-    cursorBlink: false,
-    rows: 7 });
+export const factory = new AppFactory();
+const blockStore = factory.GetBlockStore();
 
-
-const OpenTerminal = () => {
-    const _fitAddon = new FitAddon()
-    const _webLinksAddon = new WebLinksAddon()
-    const termDiv = document.getElementById('terminal');
-    if (termDiv != null) term.open(termDiv);
-    term.loadAddon(_fitAddon);
-    term.loadAddon(_webLinksAddon);
-    //_fitAddon.fit();
-    window.onresize = (evt) => {
-        _fitAddon.fit()
-    }
-}
-
-const blockStore = new BlockStore();
-const session = new Session(blockStore, term);
-
-interface IPage {
-    Run(str: string): boolean; 
-    Release(): void;
-}
-
-type FuncMap = { [key: string]: IPage };
 type UrlMap = { [key: string]: string; };
 declare global {
     interface Window {
@@ -51,15 +15,7 @@ declare global {
     }
 }
 
-const funcMap: FuncMap = {
-    "main": new GWSMain(blockStore),
-    "login": new Login(blockStore, session),
-    "dashboard": new Dashboard(blockStore, session),
-    "txdetail": new TxDetail(blockStore),
-    "blockdetail": new TxInfo(blockStore),
-    "blockscan": new BlockInfo(blockStore),
-    "accountdetail": new AccountDetail(blockStore),
-};
+const funcMap = factory.Build();
 
 const urlToFileMap: UrlMap = {
     "main": "./layouts/main.html",
@@ -169,4 +125,4 @@ const includeContentHTML = (master: string) => {
         });
 }
 
-export { OpenTerminal, includeContentHTML, includeHTML, loadNodesHtml, parseResponse }
+export { includeContentHTML, includeHTML, loadNodesHtml, parseResponse }
