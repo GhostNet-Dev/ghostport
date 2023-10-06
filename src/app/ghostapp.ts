@@ -18,9 +18,9 @@ declare global {
 const funcMap = factory.Build();
 
 const urlToFileMap: UrlMap = {
-    "main": "../layouts/main.html",
-    "login": "../layouts/login.html",
-    "dashboard": "../layouts/dashboard.html",
+    "main": "./layouts/main.html",
+    "login": "./layouts/login.html",
+    "dashboard": "./layouts/dashboard.html",
     "nft": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "download": "http://ghostwebservice.com/ghostnetservice/download.html",
