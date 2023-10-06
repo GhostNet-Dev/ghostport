@@ -1,11 +1,11 @@
-import { BlockInfo } from "../blockinfo.js";
-import { TxInfo } from "../txinfo.js";
+import { BlockInfo } from "../views/blockinfo.js";
+import { TxInfo } from "../views/txinfo.js";
 import { BlockStore } from "../store.js";
-import { TxDetail } from "../txdetail.js";
-import { GWSMain } from "../gwsmain.js";
-import { Login } from "../login.js";
-import { AccountDetail } from "../accountdetail.js";
-import { Dashboard } from "../dashboard.js";
+import { TxDetail } from "../views/txdetail.js";
+import { GWSMain } from "../views/gwsmain.js";
+import { Login } from "../views/login.js";
+import { AccountDetail } from "../views/accountdetail.js";
+import { Dashboard } from "../views/dashboard.js";
 import { Session } from "../models/session.js";
 import { Socket } from "../web/socket.js";
 

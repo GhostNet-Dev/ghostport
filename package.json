@@ -25,6 +25,9 @@
   },
   "homepage": "https://github.com/GhostNet-Dev/ghostport#readme",
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.22.20",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "electron": "^23.3.10",

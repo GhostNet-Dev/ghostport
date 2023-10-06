@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, nativeTheme } from "electron"; // ES import 
 import * as ioutil from "./filemanager/ioutills";
-import * as gwsprocess from "./app/process";
+import * as gwsprocess from "./common/process";
 import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
 
@@ -34,11 +34,7 @@ app.on("ready", () => {
   
   ipcMain.on('download', (evt, url: string, filename: string) => {
     ioutil.filedownload(url, filename, (ret: boolean)=> {
-      if (ret) {
-            evt.reply('reply_download', true);
-      } else {
-        evt.reply('reply_download', false);
-      }
+      evt.reply('reply_download', ret);
     })
   })
 
@@ -58,8 +54,6 @@ app.on("ready", () => {
     })
   });
 });
-
-
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
