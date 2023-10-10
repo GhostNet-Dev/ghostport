@@ -1,8 +1,9 @@
-export type Handler = { [key: string]: any }
-export type Msg = { types: string, params: any[] }
+export type Handler = { [key: string]: Function }
+export type S2CMsg = { types: string, params: any }
+export type C2SMsg = { types: string, params: any[] }
 
 export class Socket {
-    m_opend: boolean
+    m_opend: boolean;
     m_ws: WebSocket;
     m_handler: Handler;
     
@@ -14,21 +15,24 @@ export class Socket {
         this.m_ws.onopen = () => {
             this.m_opend = true;
             this.m_ws.onmessage = (evt) => {
-                console.log(evt.data);
-                const msg: Msg = JSON.parse(evt.data);
+                const msg: S2CMsg = JSON.parse(evt.data);
+                if (msg.types != "gwserr") console.log(evt.data);
                 this.m_handler[msg.types](msg.params);
             }
         };
+        this.m_ws.onclose = () => {
+            this.m_handler["close"]();
+        }
     }
 
     public RegisterMsgHandler(eventName: string, callback: any) {
-        this.m_handler[eventName] = (params: any[]) => {
-            callback(params[0]);
+        this.m_handler[eventName] = (params: any) => {
+            callback(params);
         }
     }
 
     public SendMsg(eventName: string, ...params: any[]) {
-        const msg: Msg = {
+        const msg: C2SMsg = {
             types: eventName,
             params: [...params],
         }

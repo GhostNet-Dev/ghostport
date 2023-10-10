@@ -1,26 +1,32 @@
+// use babel-node : https://cocoder16.tistory.com/5
 import http from 'http';
 import fs from 'fs';
+import * as ioutil from "./common/ioutills";
+import * as gwsprocess from "./common/process";
+import { Handler, C2SMsg } from './web/socket';
+import { GetPublicIp } from "./libs/getpublicip";
+import { LocalSession } from "./web/session";
+
 const mime = require('mime');
 const WebSocketServer = require('ws');
-import * as ioutil from "./filemanager/ioutills";
-import * as gwsprocess from "./common/process";
-import { Handler, Msg } from './web/socket.js';
-import { GetPublicIp } from "./libs/getpublicip";
-
 let g_ip: string;
-GetPublicIp((ip: string) => {
-            console.log(ip);
-            g_ip = ip;
-        });
 
-const server = http.createServer(function (request: any, response: any) { 
+const g_session = new LocalSession();
+
+GetPublicIp((ip: string) => {
+    console.log(ip);
+    g_ip = ip;
+});
+
+
+const server = http.createServer(function (request: any, response: any) {
     var url = request.url;
     if (request.url == '/' || request.url.startsWith("/?")) {
         url = '/index_web.html';	// 실행할 url
     }
     //console.log("." + request.url);
     try {
-        const type = mime.getType("."+ url);
+        const type = mime.getType("." + url);
         //console.log(type);
         response.setHeader("Content-Type", type); //Solution!
         response.writeHead(200);
@@ -32,53 +38,71 @@ const server = http.createServer(function (request: any, response: any) {
 });
 
 // 3. listen 함수로 8080 포트를 가진 서버를 실행한다. 서버가 실행된 것을 콘솔창에서 확인하기 위해 'Server is running...' 로그를 출력한다
-const httpServer = server.listen(8090);
+server.listen(8090);
 
 const wss = new WebSocketServer.Server({ port: 8091 });
 const g_handler: Handler = {
     "checkbin": (ws: any, filename: string) => {
         const ret = ioutil.fileExist(`./${filename}`)
-        const msg: Msg = {
-            types: "reply_checkbin",
-            params: [ret],
-        }
-        console.log(msg);
-        ws.send(JSON.stringify(msg));
+        ws.send(JSON.stringify({ types: "reply_checkbin", params: ret }));
     },
     "download": (ws: any, url: string, filename: string) => {
-        console.log(`url: ${url}, filename: ${filename}`);
         ioutil.filedownload(url, filename, (ret: boolean) => {
-            ws.send(JSON.stringify({ types: "reply_download", params: [ret] }));
+            ws.send(JSON.stringify({ types: "reply_download", params: ret }));
         });
     },
     "executeProcess": (ws: any, gwsPath: string, id: string, pw: string, port: string) => {
+        if (gwsprocess.CheckRunning() == true && !g_session.CheckSession(id, pw)) {
+            ws.send(JSON.stringify({ types: "executeProcessExit", params: true }));
+            return;
+        }
+        g_session.SetSession(id, pw);
         gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, (code: number) => {
-            ws.send(JSON.stringify({ types: "executeProcessExit", params: [true] }));
+            g_session.Clear();
+            ws.send(JSON.stringify({ types: "executeProcessExit", params: true }));
         }, (data: any) => {
-            ws.send(JSON.stringify({ types: "gwsout", params: [data] }));
+            console.log(`child stdout: ${data}`);
+            ws.send(JSON.stringify({ types: "gwsout", params: data }));
         }, (data: any) => {
-            ws.send(JSON.stringify({ types: "gwserr", params: [data] }));
+            console.log(`child stderr: ${data}`);
+            ws.send(JSON.stringify({ types: "gwserr", params: data }));
         })
     },
     "createProcess": (ws: any, gwsPath: string, id: string, pw: string, port: string) => {
         gwsprocess.CreateAccount(gwsPath, id, pw, g_ip, port, () => {
-            ws.send(JSON.stringify({ types: "createProcessExit", params: [true] }));
+            ws.send(JSON.stringify({ types: "createProcessExit", params: true }));
         })
     },
+    "getDeviceInfo": (ws: any) => {
+        ws.send(JSON.stringify({
+            types: "reply_getDeviceInfo", params: { 
+            Ip: g_ip, 
+            Os: process.platform,
+            Run: gwsprocess.CheckRunning(),
+        }
+        }));
+    },
+    "getSpace": (ws: any) => {
+        ioutil.getDiskSpace(__dirname, (diskSpace: any) => {
+            console.log(diskSpace)
+            ws.send(JSON.stringify({ types: "reply_getSpace", params: diskSpace }));
+        });
+    },
+    "getOs": (ws: any) => {
+        ws.send(JSON.stringify({ types: "reply_getOs", params: process.platform }));
+    }
 };
 
 wss.on("connection", (ws: any) => {
     console.log("connect");
     ws.on("message", (data: any) => {
-        console.log("receive: " , data);
-        const msg: Msg = JSON.parse(data);
-        console.log("convert json: " , msg);
+        const msg: C2SMsg = JSON.parse(data);
         g_handler[msg.types](ws, ...msg.params);
     });
     ws.on("close", () => {
         console.log("disconnect");
     });
-    ws.onerror = function() {
+    ws.onerror = function () {
         console.log("error occurred");
     }
 });

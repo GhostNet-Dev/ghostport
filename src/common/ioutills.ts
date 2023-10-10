@@ -1,11 +1,14 @@
 import * as http from "http"
 import * as fs from "fs";
+import checkDiskSpace from 'check-disk-space'
 
 const filedownload = (masterAddr: string, filename: string, callback :Function) => {
-    const file = fs.createWriteStream(filename);
-    const url = masterAddr;
+    const file = fs.createWriteStream(filename, {mode: 0o777});
+    const url = `${masterAddr}?os=${process.platform}`;
+
+    console.log(url);
     const request = http.get(url, function (response) {
-        console.log(file);
+        //console.log(file);
         response.pipe(file);
 
         // after download completed close filestream
@@ -27,9 +30,21 @@ const fileExist = (filename: string):boolean => {
         ret = true;
     } else {
         // File doesn't exist in path
-        console.log("file doesn't exists");
+        console.log("file doesn't exists: ", filename);
     }
     return ret;
 }
 
-export {filedownload, fileExist}
+const getDiskSpace = (path: string, callback: Function) => {
+    checkDiskSpace(path).then((diskSpace) => {
+        callback(diskSpace)
+        // {
+        //     diskPath: 'C:',
+        //     free: 12345678,
+        //     size: 98756432
+        // }
+        // Note: `free` and `size` are in bytes
+    })
+}
+
+export { getDiskSpace, filedownload, fileExist }

@@ -23,8 +23,6 @@ export class GWSMain {
         this.m_blockInfos = new Array<BlockInfoParam>();
         this.m_ipc = ipc;
 
-        
-
         ipc.RegisterMsgHandler('reply_checkbin', (payload: boolean) => {
             const bodyTag = document.getElementById('checkfile');
             if (bodyTag == null) return;
@@ -46,6 +44,11 @@ export class GWSMain {
             btn.disabled = false;
             this.drawHtmlStart();
         });
+        ipc.RegisterMsgHandler('reply_getDeviceInfo', (ret: any) => {
+            console.log(ret);
+            this.m_blockStore.SetDeviceInfo(ret.Ip, ret.Os);
+            this.checkVersion(ret.Os);
+        });
     }
     drawHtmlStart() {
         const startTag = document.getElementById('startbtn');
@@ -60,15 +63,16 @@ export class GWSMain {
         this.m_maxBlockId = 0;
         this.m_curGetherTx = 0;
         this.m_blockInfos = new Array<BlockInfoParam>();
-        this.checkVersion();
+        this.m_ipc.SendMsg('getDeviceInfo');
     }
 
-    checkVersion() {
+    checkVersion(os: string) {
         fetch(window.MasterAddr+"/info")
             .then((response) => response.json())
             .then((info)=>{
                 console.log(info);
-                this.m_filename = "GhostWebService-windows-" + info.BuildDate + ".exe"
+                this.m_filename = (os == "win32") ? "GhostWebService-windows-" + info.BuildDate + ".exe" :
+                    `GhostWebService-${os}-${info.BuildDate}`;
                 this.m_blockStore.SetGWSPath(this.m_filename);
                 this.m_ipc.SendMsg('checkbin', this.m_filename);
             })
@@ -104,7 +108,7 @@ export class GWSMain {
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
         console.log(window.MasterNode);
         tag.innerHTML = window.MasterNode.User.Nickname;
-        this.checkVersion();
+        this.checkVersion(this.blockStore.GetDeviceOs());
     }
 
     drawHtmlUpdateMasterNodeList() {

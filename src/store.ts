@@ -11,17 +11,23 @@ export class BlockStore {
     m_masterNodes: GhostWebUser[];
     m_gwsFilename: string;
     m_ip: string;
+    m_os: string;
 
     public constructor() {
         this.m_minBlockId = MaxUnsignedInt;
         this.blockInfos = new Array<BlockInfoParam>();
         this.m_accountMap = new Map<string, AccountParam>();
         this.m_masterNodes = new Array<GhostWebUser>();
-        this.m_ip = this.m_gwsFilename = "";
+        this.m_os = this.m_ip = this.m_gwsFilename = "";
     }
 
-    //public SetPublicIp(ip: string) { this.m_ip = ip; }
-    //public GetPublicIp(): string { return this.m_ip; }
+    public SetDeviceInfo(ip: string, os: string) { 
+        this.m_ip = ip; 
+        this.m_os = os; 
+    }
+
+    public GetDeviceOs(): string { return this.m_os; }
+    public GetDeviceIp(): string { return this.m_ip; }
 
     public SetGWSPath(filename: string) {
         this.m_gwsFilename = filename;

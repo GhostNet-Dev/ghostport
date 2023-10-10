@@ -17,6 +17,7 @@ declare global {
 
 const funcMap = factory.Build();
 
+// app과 web은 상대경로가 다르다.
 const urlToFileMap: UrlMap = {
     "main": "./layouts/main.html",
     "login": "./layouts/login.html",

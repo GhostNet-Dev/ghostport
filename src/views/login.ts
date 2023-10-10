@@ -29,7 +29,7 @@ export class Login {
         btn.disabled = true;
         this.drawHtmlLoading(true);
         this.m_ipc.SendMsg('createProcess', './' + this.m_blockStore.GetGWSPath(),
-            this.m_id, this.m_pw, '50129');
+            this.m_id, this.m_pw, '50135');
     }
     login() {
         if (!this.checkInputData()) return;

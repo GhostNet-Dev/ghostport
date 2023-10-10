@@ -17,13 +17,15 @@ export class Session {
         this.m_ipc = ipc;
   
         ipc.RegisterMsgHandler('executeProcessExit', (code:number) => {
+            this.m_signinFlag = false;
+            window.ClickLoadPage("main", false);
         });
         ipc.RegisterMsgHandler('gwsout', (data: any) => {
-            if (this.m_term == null) return;
+            if (this.m_term == null) { return; }
             this.m_term.write(data);
         });
         ipc.RegisterMsgHandler('gwserr', (data: any) => {
-            if (this.m_term == null) return;
+            if (this.m_term == null) { return; }
             this.m_term.write(data);
         });
     }
@@ -34,29 +36,7 @@ export class Session {
         this.m_signinFlag = true;
         
         this.m_ipc.SendMsg('executeProcess', './' + this.m_blockStore.GetGWSPath(),
-            this.m_id, this.m_pw, '50129');
-            /*
-        const session = this;
-        this.m_gws = spawn('./' + this.m_blockStore.GetGWSPath(),
-            ['-u', this.m_id, '-p', this.m_pw,
-                '--ip', this.m_blockStore.GetPublicIp(),
-                '--port', '50129'])
-
-        this.m_gws.on('exit', function (code, signal) {
-            console.log('child process exited with ' +
-                `code ${code} and signal ${signal}`)
-        })
-
-        this.m_gws.stdout.on('data', data => {
-            if (session.m_term == null) return;
-            session.m_term.write(data);
-            //console.log(`child stdout: ${data}`);
-        })
-        this.m_gws.stderr.on('data', data => {
-            if (session.m_term == null) return;
-            session.m_term.write(data);
-            //console.log(`child stderr: ${data}`);
-        })*/
+            this.m_id, this.m_pw, '50135');
     }
 
     public CheckLogin(): boolean {
