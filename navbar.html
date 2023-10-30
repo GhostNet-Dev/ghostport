@@ -5,22 +5,30 @@
         <span class="visually-hidden">Icon-only</span></a>
     <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
         <li class="nav-item">
-            <a id="nav-dashboard" class="nav-link active py-3 handcursor"  onclick="ClickLoadPage('dashboard', true)" aria-current="page">
+            <a id="nav-dashboard" class="nav-link active py-3 handcursor"  onclick="ClickLoadPage('dashboard', true)" 
+            aria-current="page" data-toggle="tooltip" title="dashboard"
+            data-placement="right">
                 <span class="material-symbols-outlined"> home </span>
             </a>
         </li>
         <li>
-            <a id="nav-blockscan" class="nav-link py-3 handcursor" onclick="ClickLoadPage('blockscan', true)">
+            <a id="nav-blockscan" class="nav-link py-3 handcursor" onclick="ClickLoadPage('blockscan', true)"
+             data-toggle="tooltip" title="BlockChain"
+            data-placement="right">
                 <span class="material-symbols-outlined"> dashboard </span>
             </a>
         </li>
         <li>
-            <a id="nav-image" class="nav-link py-3 handcursor">
+            <a id="nav-image" class="nav-link py-3 handcursor"
+            data-toggle="tooltip" title="NFTs (Stable-Diffusion)"
+            data-placement="right">
                 <span class="material-symbols-outlined"> image </span>
             </a>
         </li>
         <li>
-            <a id="nav-chat" class="nav-link py-3 handcursor">
+            <a id="nav-chat" class="nav-link py-3 handcursor"
+            data-toggle="tooltip" title="LLAMA (GPT)"
+            data-placement="right">
                 <span class="material-symbols-outlined"> chat </span>
             </a>
         </li>

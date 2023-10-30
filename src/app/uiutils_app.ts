@@ -1,11 +1,12 @@
 import "module-alias/register"
 import { factory, includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/app/ghostapp.js";
+import * as config from "@src/models/config.js";
 
 includeHTML("header", "navbar.html");
 includeHTML("footer", "foot.html");
 
 addEventListener("load", () =>
-    fetch("http://ghostnetroot.com:58080/nodes")
+    fetch(config.RootAddress)
         .then((response) => response.json())
         .then(parseResponse)
         .then(loadNodesHtml)

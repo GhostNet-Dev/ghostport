@@ -1,16 +1,60 @@
-
-<h5>Username</h5>
-<div class="container">
+<div class="container-fluid p-4">
     <div class="row">
-        <div class="col">Public Address</div>
+        <div class="col">
+            <h5>Dashboard</h5>
+        </div>
     </div>
     <div class="row">
-        <div class="col">Total Coin</div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header font-weight-bold" id="nickname">username</div>
+                <div class="card-body p-2">
+                    <div class="row m-3">
+                        <div class="col" style="max-width: 200px;">Public Address</div>
+                        <div class="col">...</div>
+                    </div>
+                    <div class="row m-3">
+                        <div class="col">Total Coin</div>
+                    </div>
+                    <div class="row m-3">
+                        <div class="col">Disk Space</div>
+                    </div>
+                    <div class="row m-3">
+                        <div class="col">Online Clients</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <div class="col">Disk Space</div>
+    <div class="col">
+        <br>
+        <h5>Transactions</h5>
+        </div>
     </div>
     <div class="row">
-        <div class="col">Online Clients</div>
+        <div class="col">
+            <nav class="nav nav-pills nav-justified">
+                <a class="nav-item nav-link active" id="feed-tab" data-toggle="tab" href="#feed" role="tab"
+                    aria-controls="feed" href="#">
+                    <h5>Coin</h5>
+                </a>
+                <a class="nav-item nav-link" id="nft-tab" data-toggle="tab" href="#nft" role="tab" aria-controls="nft"
+                    href="#">
+                    <h5>NFTs</h5>
+                </a>
+                <!--<a class="nav-item nav-link" id="market-tab" data-toggle="tab" href="#market" role="tab" aria-controls="market" href="#"><h5>Market</h5></a>-->
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="feed" role="tabpanel" aria-labelledby="feed-tab">
+                </div>
+                <div class="tab-pane fade" id="nft" role="tabpanel" aria-labelledby="nft-tab">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
