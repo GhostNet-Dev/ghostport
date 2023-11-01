@@ -6,7 +6,7 @@ includeHTML("header", "navbar.html");
 includeHTML("footer", "foot.html");
 
 addEventListener("load", () =>
-    fetch(config.RootAddress)
+    fetch(config.RootAddress + "/nodes")
         .then((response) => response.json())
         .then(parseResponse)
         .then(loadNodesHtml)

@@ -1,6 +1,7 @@
 import { BlockInfoParam, GhostWebUser } from "../models/param.js";
 import { BlockStore } from "../store.js";
 import { Channel } from "../models/com.js";
+import * as config from "../models/config.js";
 
 const MaxInfoViewCnt = 5;
 
@@ -67,7 +68,7 @@ export class GWSMain {
     }
 
     checkVersion(os: string) {
-        fetch(window.MasterAddr+"/info")
+        fetch(config.RootAddress+"/info")
             .then((response) => response.json())
             .then((info)=>{
                 console.log(info);
@@ -84,7 +85,7 @@ export class GWSMain {
         const btn = document.getElementById("downloadBtn") as HTMLButtonElement
         btn.disabled = true;
 
-        const url = window.MasterAddr + "/download";
+        const url = config.RootAddress + "/download";
         console.log(url)
         this.m_ipc.SendMsg('download', url, this.m_filename);
         bodyTag.innerHTML = `<div class="spinner-grow" role="status">
@@ -135,6 +136,7 @@ export class GWSMain {
         const btn = document.getElementById("downloadBtn") as HTMLButtonElement
         btn.onclick = () => this.downloadProgram();
 
+        /*
         const coBtn = document.getElementById("connectBtn") as HTMLButtonElement
         coBtn.onclick = () => this.connectServer();
 
@@ -145,6 +147,7 @@ export class GWSMain {
             remoteTag.style.visibility = (remoteTag.style.visibility == "visible") ? "hidden" : "visible";
         }
         remoteTag.style.visibility = "hidden";
+        */
         this.drawHtmlUpdateMasterNodeList();
         return true;
     }

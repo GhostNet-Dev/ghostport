@@ -2,9 +2,9 @@ import * as http from "http"
 import * as fs from "fs";
 import checkDiskSpace from 'check-disk-space'
 
-const filedownload = (masterAddr: string, filename: string, callback :Function) => {
+const filedownload = (uri: string, filename: string, callback :Function) => {
     const file = fs.createWriteStream(filename, {mode: 0o777});
-    const url = `${masterAddr}?os=${process.platform}`;
+    const url = `${uri}/gws?os=${process.platform}`;
 
     console.log(url);
     const request = http.get(url, function (response) {
