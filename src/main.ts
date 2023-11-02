@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, nativeTheme } from "electron"; // ES import 
 import * as ioutil from "./common/ioutills";
 import * as gwsprocess from "./common/process";
+import * as account from "./common/account";
 import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
 
@@ -74,6 +75,15 @@ app.on("ready", () => {
   });
   ipcMain.on('getOs', (evt) => {
     evt.reply('reply_getOs', process.platform);
+  });
+  ipcMain.on('getAccountList', (evt) => {
+    evt.reply('reply_GetAccontList', account.GetAccountFileList());
+  });
+  ipcMain.on('importAccount', (evt, filename: string, dataString: string) => {
+    const buf = new Uint8Array(JSON.parse(dataString)).buffer;
+    ioutil.fileWrite(`./${filename}`, buf)
+    evt.reply('reply_importAccount', true);
+    evt.reply('reply_GetAccontList', account.GetAccountFileList());
   });
 
 });

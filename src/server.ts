@@ -3,6 +3,7 @@ import http from 'http';
 import fs from 'fs';
 import * as ioutil from "./common/ioutills";
 import * as gwsprocess from "./common/process";
+import * as account from "./common/account";
 import { Handler, C2SMsg } from './web/socket';
 import { GetPublicIp } from "./libs/getpublicip";
 import { LocalSession } from "./web/session";
@@ -29,9 +30,11 @@ const server = http.createServer(function (request: any, response: any) {
         const type = mime.getType("." + url);
         //console.log(type);
         response.setHeader("Content-Type", type); //Solution!
+        const file = fs.readFileSync("." + url)
         response.writeHead(200);
-        response.end(fs.readFileSync("." + url));
-    } catch {
+        response.end(file);
+    } catch (err){
+        console.log(err)
         response.writeHead(404);
         response.end();
     }
@@ -90,6 +93,23 @@ const g_handler: Handler = {
     },
     "getOs": (ws: any) => {
         ws.send(JSON.stringify({ types: "reply_getOs", params: process.platform }));
+    },
+    "getAccountList": (ws: any) => {
+        ws.send(JSON.stringify({ types: "reply_GetAccountList",
+            params: account.GetAccountFileList()
+        }));
+    },
+    "importAccount": (ws: any, filename: string, dataString: string) => {
+        const buf = new Uint8Array(JSON.parse(dataString)).buffer;
+        ioutil.fileWrite(`./${filename}`, buf)
+        ws.send(JSON.stringify({
+            types: "reply_importAccount",
+            params: true
+        }));
+        ws.send(JSON.stringify({
+            types: "reply_GetAccountList",
+            params: account.GetAccountFileList()
+        }));
     }
 };
 

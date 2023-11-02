@@ -47,4 +47,8 @@ const getDiskSpace = (path: string, callback: Function) => {
     })
 }
 
-export { getDiskSpace, filedownload, fileExist }
+const fileWrite = (path: string, file: ArrayBuffer) => {
+    fs.writeFile(path, new DataView(file), 'binary', (err) => { console.log(err) })
+}
+
+export { getDiskSpace, filedownload, fileExist, fileWrite }

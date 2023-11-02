@@ -1,10 +1,64 @@
-<br><br><br>
+<br><br>
+<h1 class="text-center font-weight-bold">Ghost Studio</h1>
+<br>
 <div class="container-sm my-3">
     <div class="row">
         <div class="col-2"></div>
         <div class="col">
             <div class="card">
-                <div class="card-header font-weight-bold">Login</div>
+                <div class="card-header font-weight-bold">Account List</div>
+                <div class="card-body p-2" id="latestblocks">
+                    <div class="row mb-3">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="accountList">
+                                <option selected>Choose...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm">
+                            <input type="password" class="form-control" id="inputPw1" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="row m-3 text-center">
+                        <button type="submit" id="signinBtn" class="btn btn-primary">Sign-In</button>
+                    </div>
+                    
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header font-weight-bold">Import Account</div>
+                <div class="card-body p-2" id="latestblocks">
+                    <div class="row mb-3">
+                        <div class="input-group">
+                            <div class="form-file" style="width:100%">
+                                <button class="btn btn-outline-primary" type="button" id="importBtn">New Account Register</button>
+                                <input type="file" class="form-file-input" id="accountFilePath">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3" id="importResult">
+                    </div>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col">
+            <div class="card">
+                <div class="card-header font-weight-bold">Create Account</div>
                 <div class="card-body p-2" id="latestblocks">
                     <div class="row mb-3">
                         <label for="inputId" class="col-sm-3 col-form-label">Username</label>
@@ -20,8 +74,9 @@
                     </div>
                     <div class="row m-3 text-center" id="checkfile">
                     </div>
-                    <button type="submit" id="signinBtn" class="btn btn-primary">Sign-In</button>
+                    <div class="row m-3 text-center">
                     <button type="submit" id="createBtn" class="btn btn-primary">Create Ghost Account</button>
+                    </div>
                 </div>
             </div>
             <br>
