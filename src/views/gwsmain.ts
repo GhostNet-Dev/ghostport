@@ -2,6 +2,7 @@ import { BlockInfoParam, GhostWebUser } from "../models/param.js";
 import { BlockStore } from "../store.js";
 import { Channel } from "../models/com.js";
 import * as config from "../models/config.js";
+import { SyncVersion } from "../common/syncversion.js";
 
 const MaxInfoViewCnt = 5;
 
@@ -15,6 +16,7 @@ export class GWSMain {
     m_filename: string;
     m_publicIp: string;
     m_ipc: Channel;
+    m_syncVersion: SyncVersion;
 
     public constructor(private blockStore: BlockStore, ipc: Channel) {
         this.m_blockStore = blockStore;
@@ -23,35 +25,25 @@ export class GWSMain {
         this.m_publicIp = this.m_filename = "";
         this.m_blockInfos = new Array<BlockInfoParam>();
         this.m_ipc = ipc;
-
-        ipc.RegisterMsgHandler('reply_checkbin', (payload: boolean) => {
-            const bodyTag = document.getElementById('checkfile');
-            if (bodyTag == null) return;
-
-            if (payload == false) {
-                bodyTag.innerHTML = "The GhostNet Deamon does not exist."
-                console.log("request file to server");
-                return;
-            } 
-            bodyTag.innerHTML = "Ready to get started"
-            this.drawHtmlStart();
-        });
-        ipc.RegisterMsgHandler('reply_download', (ret: boolean) => {
-            const bodyTag = document.getElementById('checkfile');
-            if (bodyTag == null) return;
-            bodyTag.innerHTML = (ret) ? "Complete" : "Connection failed.";
             
-            const btn = document.getElementById("downloadBtn") as HTMLButtonElement
-            btn.disabled = false;
-            this.drawHtmlStart();
-        });
+        this.m_syncVersion = new SyncVersion(blockStore, ipc,
+            (total: number, curr: number, msg: string) => {
+                const bodyTag = document.getElementById('checkfile');
+                if (bodyTag == null) return;
+                bodyTag.innerHTML = `${msg} (${curr}/${total})`;
+            }, () => this.drawHtmlStart());
+
         ipc.RegisterMsgHandler('reply_getDeviceInfo', (ret: any) => {
             console.log(ret);
             this.m_blockStore.SetDeviceInfo(ret.Ip, ret.Os);
-            this.checkVersion(ret.Os);
+            this.m_syncVersion.CheckVersion(ret.Os);
         });
     }
     drawHtmlStart() {
+        const bodyTag = document.getElementById('checkfile');
+        if (bodyTag == null) return;
+        bodyTag.innerHTML = "Ready to get started";
+
         const startTag = document.getElementById('startbtn');
         if (startTag == null) return;
         startTag.innerHTML = `
@@ -67,29 +59,10 @@ export class GWSMain {
         this.m_ipc.SendMsg('getDeviceInfo');
     }
 
-    checkVersion(os: string) {
-        fetch(config.RootAddress+"/info")
-            .then((response) => response.json())
-            .then((info)=>{
-                console.log(info);
-                this.m_filename = (os == "win32") ? "GhostWebService-windows-" + info.BuildDate + ".exe" :
-                    `GhostWebService-${os}-${info.BuildDate}`;
-                this.m_blockStore.SetGWSPath(this.m_filename);
-                this.m_ipc.SendMsg('checkbin', this.m_filename);
-            })
-    }
-
     downloadProgram() {
-        const bodyTag = document.getElementById('checkfile');
-        if (bodyTag == null) return;
         const btn = document.getElementById("downloadBtn") as HTMLButtonElement
         btn.disabled = true;
-
-        const url = config.RootAddress + "/download";
-        console.log(url)
-        this.m_ipc.SendMsg('download', url, this.m_filename);
-        bodyTag.innerHTML = `<div class="spinner-grow" role="status">
-            <span class="sr-only"></span> </div> `
+        this.m_syncVersion.GetDownloadList()
     }
     connectServer() {
         const result = document.getElementById("connectResult")
@@ -109,7 +82,7 @@ export class GWSMain {
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
         console.log(window.MasterNode);
         tag.innerHTML = window.MasterNode.User.Nickname;
-        this.checkVersion(this.blockStore.GetDeviceOs());
+        this.m_syncVersion.CheckVersion(this.blockStore.GetDeviceOs());
     }
 
     drawHtmlUpdateMasterNodeList() {

@@ -9,11 +9,19 @@ export class Dashboard {
         this.m_blockStore = blockStore;
     }
 
+    htmlUpdateInfo() {
+        const nickTag = document.getElementById('nickname');
+        if (nickTag == null) return false;
+        nickTag.innerHTML = this.m_session.GetId()
+        const pubTag = document.getElementById('pubkey');
+        if (pubTag == null) return false;
+        pubTag.innerHTML = this.m_session.GetPubKey()
+    }
+
     public Run(masterAddr: string): boolean {
         if (!this.m_session.CheckLogin()) {
             window.ClickLoadPage("main", false);
         }
-
         return true;
     }
 

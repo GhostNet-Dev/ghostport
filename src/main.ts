@@ -4,6 +4,7 @@ import * as gwsprocess from "./common/process";
 import * as account from "./common/account";
 import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
+import { FileInfo } from "./models/param.js";
 
 let window: BrowserWindow;
 let g_ip: string;
@@ -29,7 +30,7 @@ app.on("ready", () => {
   window.loadFile("index.html");
 
   ipcMain.on('checkbin', (evt, filename: string) => {
-    const ret = ioutil.fileExist(`./${filename}`)
+    const ret = ioutil.fileExist("./bins", filename)
     evt.reply('reply_checkbin', ret);
   })
 
@@ -43,7 +44,7 @@ app.on("ready", () => {
     if (gwsprocess.CheckRunning() == true) {
       return;
     }
-    gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, (code: number) => {
+    gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, "58080", (code: number) => {
       window.webContents.send('executeProcessExit', true);
     }, (data: any) => {
       window.webContents.send('gwsout', data);
@@ -84,6 +85,14 @@ app.on("ready", () => {
     ioutil.fileWrite(`./${filename}`, buf)
     evt.reply('reply_importAccount', true);
     evt.reply('reply_GetAccontList', account.GetAccountFileList());
+  });
+  ipcMain.on("downloadfiles", (evt, url: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[]) => {
+    let index = 0;
+    ioutil.downloads(url, assetList, binsList, libsList, (filename: string) => {
+      evt.reply("reply_downloadfiles", {
+        Index: ++index, Filename: filename
+      });
+    })
   });
 
 });

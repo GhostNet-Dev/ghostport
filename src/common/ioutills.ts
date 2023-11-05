@@ -1,6 +1,8 @@
 import * as http from "http"
+import * as path from "path"
 import * as fs from "fs";
 import checkDiskSpace from 'check-disk-space'
+import { FileInfo } from "../models/param.js";
 
 const filedownload = (uri: string, filename: string, callback :Function) => {
     const file = fs.createWriteStream(filename, {mode: 0o777});
@@ -23,11 +25,48 @@ const filedownload = (uri: string, filename: string, callback :Function) => {
     //console.log(request);
 }
 
-const fileExist = (filename: string):boolean => {
+const requestHttpGet = (uri: string, filename: string, type: string, filepath: string, callback: Function) => {
+    if (!fs.existsSync(filepath)) {
+        fs.mkdirSync(filepath);
+    }
+    const file = fs.createWriteStream(path.join(filepath , filename), { mode: 0o777 });
+    return http.get(`${uri}/download?type=${type}&os=${process.platform}&filename=${filename}`, (response) => {
+        response.pipe(file);
+
+        // after download completed close filestream
+        file.on("finish", () => {
+            file.close();
+            console.log("Download Completed");
+            callback(filename);
+        });
+    })
+}
+
+const downloads = async (uri: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[], callback: Function) => {
+    const assetRequests = assetList.map((fileinfo: FileInfo) => {
+        return requestHttpGet(uri, fileinfo.filename, "asset", "./assets", callback)
+    });
+    const binsRequests = binsList.map((fileinfo: FileInfo) => {
+        return requestHttpGet(uri, fileinfo.filename, "bins", "./bins", callback)
+    });
+    const libsRequests = libsList.map((fileinfo: FileInfo) => {
+        return requestHttpGet(uri, fileinfo.filename, "libs", "/usr/local/lib", callback)
+    });
+    await Promise.all([
+        assetRequests, binsRequests, libsRequests
+    ])
+}
+
+const fileExist = (filepath: string, filename: string):boolean => {
     let ret = false;
-    if (fs.existsSync(filename)) {
+    if (!fs.existsSync(filepath)) {
+        fs.mkdirSync(filepath);
+        return ret;
+    }
+    if (fs.existsSync(path.join(filepath, filename))) {
         // File exists in path
-        ret = true;
+        if (fs.statSync(path.join(filepath, filename)).size > 0)
+            ret = true;
     } else {
         // File doesn't exist in path
         console.log("file doesn't exists: ", filename);
@@ -35,8 +74,8 @@ const fileExist = (filename: string):boolean => {
     return ret;
 }
 
-const getDiskSpace = (path: string, callback: Function) => {
-    checkDiskSpace(path).then((diskSpace) => {
+const getDiskSpace = (filepath: string, callback: Function) => {
+    checkDiskSpace(filepath).then((diskSpace) => {
         callback(diskSpace)
         // {
         //     diskPath: 'C:',
@@ -47,8 +86,8 @@ const getDiskSpace = (path: string, callback: Function) => {
     })
 }
 
-const fileWrite = (path: string, file: ArrayBuffer) => {
-    fs.writeFile(path, new DataView(file), 'binary', (err) => { console.log(err) })
+const fileWrite = (filepath: string, file: ArrayBuffer) => {
+    fs.writeFile(filepath, new DataView(file), 'binary', (err) => { console.log(err) })
 }
 
-export { getDiskSpace, filedownload, fileExist, fileWrite }
+export { getDiskSpace, filedownload, fileExist, fileWrite, downloads}

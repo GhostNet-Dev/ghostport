@@ -58,7 +58,8 @@ RUN apt-get update && apt-get install nodejs -y
 WORKDIR /usr/src/app
 ENV NODE_ENV=development
 #RUN go build main.go
-RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git && cd ghoststudio && \
+RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git 
+RUN cd ghoststudio && \
         git pull && \
         npm i -D typescript && npm install -g && \
         npx tsc -p tsconfig-web.json

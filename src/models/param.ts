@@ -1,6 +1,11 @@
 import { GhostNetBlockHeader, GhostNetDataBlockHeader } from "./block.js";
 import { GhostTransaction } from "./tx.js";
 
+export type FileInfo = {
+    filename: string,
+    filesize: number,
+}
+
 export type BlockInfoParam = {
     Header: GhostNetBlockHeader,
     DataHeader: GhostNetDataBlockHeader,

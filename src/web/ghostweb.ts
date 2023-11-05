@@ -20,6 +20,7 @@ const urlToFileMap: UrlMap = {
     "main": "../layouts/main.html",
     "login": "../layouts/login.html",
     "dashboard": "../layouts/dashboard.html",
+    "diffusion": "../layouts/diffusion.html",
     "nft": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "download": "http://ghostwebservice.com/ghostnetservice/download.html",
@@ -37,11 +38,17 @@ const getPageIdParam = () => {
     return key;
 }
 
-const menuList = ["dashboard", "blockscan", "image", "chat", "account"]
+const menuList = new Map([
+    ["dashboard", ["main", "login", "dashboard"]], 
+    ["blockscan", ["blockscan", "blockdetail", "txdetail", "accountdetail"]], 
+    ["image", ["diffusion"]], 
+    ["chat", [""]], 
+    ["account", [""]] ]);
+
 const updateMenu = (key: string) => {
-    menuList.forEach(menu => {
-        const tag = document.getElementById("nav-" + menu)
-        const active = menu == key ? "active " : " ";
+    menuList.forEach((v, k) => {
+        const tag = document.getElementById("nav-" + k)
+        const active = v.findIndex((e) => e == key) >= 0 ? "active " : " ";
         tag?.setAttribute('class', 'nav-link ' + active + 'py-3 handcursor');
     })
 }
@@ -105,6 +112,7 @@ const includeHTML = (id: string, filename: string) => {
 
 const includeContentHTML = (master: string) => {
     const key = getPageIdParam();
+    updateMenu(key);
     const filename = urlToFileMap[key];
     const backUpBeforPage = beforPage;
     beforPage = key;

@@ -11,16 +11,19 @@
                 <div class="card-body p-2">
                     <div class="row m-3">
                         <div class="col" style="max-width: 200px;">Public Address</div>
-                        <div class="col">...</div>
+                        <div class="col" id="pubkey">...</div>
                     </div>
                     <div class="row m-3">
                         <div class="col">Total Coin</div>
+                        <div class="col" id="totalcoin">...</div>
                     </div>
                     <div class="row m-3">
                         <div class="col">Disk Space</div>
+                        <div class="col" id="diskspace">...</div>
                     </div>
                     <div class="row m-3">
                         <div class="col">Online Clients</div>
+                        <div class="col" id="onlineclient">...</div>
                     </div>
                 </div>
             </div>
@@ -35,14 +38,14 @@
     <div class="row">
         <div class="col">
             <nav class="nav nav-pills nav-justified">
-                <a class="nav-item nav-link active" id="feed-tab" data-toggle="tab" href="#feed" role="tab"
-                    aria-controls="feed" href="#">
+                <button class="nav-link active" id="coin-tab" data-bs-toggle="tab" href="#feed" role="tab"
+                    data-bs-target="#coinview" aria-controls="coinview">
                     <h5>Coin</h5>
-                </a>
-                <a class="nav-item nav-link" id="nft-tab" data-toggle="tab" href="#nft" role="tab" aria-controls="nft"
-                    href="#">
+                </button>
+                <button class="nav-link" id="nft-tab" data-bs-toggle="tab" role="tab" data-bs-target="#nftview"
+                    aria-controls="nftview">
                     <h5>NFTs</h5>
-                </a>
+                </button>
                 <!--<a class="nav-item nav-link" id="market-tab" data-toggle="tab" href="#market" role="tab" aria-controls="market" href="#"><h5>Market</h5></a>-->
             </nav>
         </div>
@@ -50,9 +53,11 @@
     <div class="row">
         <div class="col">
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="feed" role="tabpanel" aria-labelledby="feed-tab">
+                <div class="tab-pane fade show active" id="coinview" role="tabpanel" aria-labelledby="coin-tab">
+                    todo: coin
                 </div>
-                <div class="tab-pane fade" id="nft" role="tabpanel" aria-labelledby="nft-tab">
+                <div class="tab-pane fade" id="nftview" role="tabpanel" aria-labelledby="nft-tab">
+                    todo: nft
                 </div>
             </div>
         </div>

@@ -4,9 +4,11 @@ import fs from 'fs';
 import * as ioutil from "./common/ioutills";
 import * as gwsprocess from "./common/process";
 import * as account from "./common/account";
+import * as utils from "./common/utils";
 import { Handler, C2SMsg } from './web/socket';
 import { GetPublicIp } from "./libs/getpublicip";
 import { LocalSession } from "./web/session";
+import { FileInfo } from "./models/param.js";
 
 const mime = require('mime');
 const WebSocketServer = require('ws');
@@ -46,7 +48,7 @@ server.listen(8090);
 const wss = new WebSocketServer.Server({ port: 8091 });
 const g_handler: Handler = {
     "checkbin": (ws: any, filename: string) => {
-        const ret = ioutil.fileExist(`./${filename}`)
+        const ret = ioutil.fileExist("./bins", filename)
         ws.send(JSON.stringify({ types: "reply_checkbin", params: ret }));
     },
     "download": (ws: any, url: string, filename: string) => {
@@ -55,12 +57,13 @@ const g_handler: Handler = {
         });
     },
     "executeProcess": (ws: any, gwsPath: string, id: string, pw: string, port: string) => {
+        console.log(id, pw)
         if (gwsprocess.CheckRunning() == true && !g_session.CheckSession(id, pw)) {
             ws.send(JSON.stringify({ types: "executeProcessExit", params: true }));
             return;
         }
         g_session.SetSession(id, pw);
-        gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, (code: number) => {
+        gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, "58080", (code: number) => {
             g_session.Clear();
             ws.send(JSON.stringify({ types: "executeProcessExit", params: true }));
         }, (data: any) => {
@@ -110,7 +113,34 @@ const g_handler: Handler = {
             types: "reply_GetAccountList",
             params: account.GetAccountFileList()
         }));
-    }
+    },
+    "downloadfiles": (ws: any, url: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[]) => {
+        let index = 0;
+        ioutil.downloads(url, assetList, binsList, libsList, (filename: string) => {
+            ws.send(JSON.stringify({
+                types: "reply_downloadfiles",
+                params: {
+                    Index: ++index, Filename: filename
+                }
+            }));
+        })
+    },
+    "generateImage": (ws: any, prompt: string, nprompt: string, height: string, 
+        width: string, step: string, seed: string) => {
+        const filename = utils.getUnixTick() + ".png";
+        const initFilename = "";
+        gwsprocess.DiffusionProcess(prompt, nprompt, height, width,
+            step, seed, filename, initFilename,
+            (code: number) => {
+                ws.send(JSON.stringify({ types: "reply_generateImage", params: filename }));
+            }, (data: any) => {
+                console.log(`child stdout: ${data}`);
+                ws.send(JSON.stringify({ types: "gwsout", params: data }));
+            }, (data: any) => {
+                console.log(`child stderr: ${data}`);
+                ws.send(JSON.stringify({ types: "gwserr", params: data }));
+            });
+    },
 };
 
 wss.on("connection", (ws: any) => {

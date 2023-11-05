@@ -25,5 +25,4 @@ function calcGCoin(coin: number): string {
     const gcoin = coin/1000000.0;
     return gcoin.toFixed(3);
 }
-
 export { elapsedTime, calcGCoin };

@@ -16,7 +16,14 @@ export class Socket {
             this.m_opend = true;
             this.m_ws.onmessage = (evt) => {
                 const msg: S2CMsg = JSON.parse(evt.data);
-                if (msg.types != "gwserr") console.log(evt.data);
+                switch (msg.types) {
+                    case "gwserr":
+                    case "gwsout":
+                        break;
+                    default:
+                        console.log(evt.data);
+                        break;
+                }
                 this.m_handler[msg.types](msg.params);
             }
         };

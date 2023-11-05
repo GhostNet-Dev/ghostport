@@ -38,13 +38,19 @@ export class Login {
         const btn = document.getElementById("createBtn") as HTMLButtonElement
         btn.disabled = true;
         this.drawHtmlLoading(true);
-        this.m_ipc.SendMsg('createProcess', './' + this.m_blockStore.GetGWSPath(),
+        this.m_ipc.SendMsg('createProcess', './bins/' + this.m_blockStore.GetGWSPath(),
             this.m_id, this.m_pw, '50135');
     }
     login() {
         const tag = document.getElementById("accountList") as HTMLSelectElement;
         this.m_id = tag.options[tag.selectedIndex].value;
-        this.m_session.SignIn(this.m_id, this.m_pw);
+
+        if (!this.checkPwData("inputPw1")) return;
+
+        const accfilename = tag.options[tag.selectedIndex].text;
+        const pubkey = accfilename.split('.')[0].split('@')[1];
+
+        this.m_session.SignIn(this.m_id, this.m_pw, pubkey);
         window.ClickLoadPage("dashboard", false);
     }
     drawHtmlLoading(disable: boolean) {
@@ -76,6 +82,15 @@ export class Login {
     warningMsg(msg: string) {
 
     }
+    checkPwData(tagId: string): boolean {
+        const inputPw = document.getElementById(tagId) as HTMLInputElement;
+        if (inputPw.value == "") {
+            this.warningMsg("Please. Enter your Password");
+            return false;
+        }
+        this.m_pw = inputPw.value;
+        return true;
+    }
     checkInputData(): boolean {
         const inputId = document.getElementById("inputId") as HTMLInputElement;
         if (inputId.value == "") {
@@ -83,13 +98,7 @@ export class Login {
             return false;
         }
         this.m_id = inputId.value;
-        const inputPw = document.getElementById("inputPw") as HTMLInputElement;
-        if (inputPw.value == "") {
-            this.warningMsg("Please. Enter your Password");
-            return false;
-        }
-        this.m_pw = inputPw.value;
-        return true;
+        return this.checkPwData("inputPw");
     }
 
     requestAccountList() {

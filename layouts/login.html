@@ -5,27 +5,21 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col">
-            <div class="card">
-                <div class="card-header font-weight-bold">Account List</div>
-                <div class="card-body p-2" id="latestblocks">
-                    <div class="row mb-3">
-                        <div class="input-group mb-3">
-                            <select class="form-select" id="accountList">
-                                <option selected>Choose...</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-sm">
-                            <input type="password" class="form-control" id="inputPw1" placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="row m-3 text-center">
-                        <button type="submit" id="signinBtn" class="btn btn-primary">Sign-In</button>
-                    </div>
-                    
-                </div>
-            </div>
+            <nav class="nav nav-pills nav-justified">
+                <button class="nav-link active p-2" id="login-tab" data-bs-toggle="tab" href="#feed" role="tab"
+                    data-bs-target="#loginview" aria-controls="loginview">
+                    <h5>Login</h5>
+                </button>
+                <button class="nav-link p-2" id="import-tab" data-bs-toggle="tab" role="tab" data-bs-target="#importview"
+                    aria-controls="importview">
+                    <h5>Import Account File</h5>
+                </button>
+                <button class="nav-link p-2" id="create-tab" data-bs-toggle="tab" role="tab" data-bs-target="#createview"
+                    aria-controls="createview">
+                    <h5>Create Account</h5>
+                </button>
+                <!--<a class="nav-item nav-link" id="market-tab" data-toggle="tab" href="#market" role="tab" aria-controls="market" href="#"><h5>Market</h5></a>-->
+            </nav>
             <br>
         </div>
         <div class="col-2"></div>
@@ -34,52 +28,75 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col">
-            <div class="card">
-                <div class="card-header font-weight-bold">Import Account</div>
-                <div class="card-body p-2" id="latestblocks">
-                    <div class="row mb-3">
-                        <div class="input-group">
-                            <div class="form-file" style="width:100%">
-                                <button class="btn btn-outline-primary" type="button" id="importBtn">New Account Register</button>
-                                <input type="file" class="form-file-input" id="accountFilePath">
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="loginview" role="tabpanel" aria-labelledby="login-tab">
+                    <div class="card">
+                        <div class="card-header font-weight-bold">Account List</div>
+                        <div class="card-body p-2" id="latestblocks">
+                            <div class="row mb-3">
+                                <div class="input-group mb-3">
+                                    <select class="form-select" id="accountList">
+                                        <option selected>Choose...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm">
+                                    <input type="password" class="form-control" id="inputPw1" placeholder="Password">
+                                </div>
+                            </div>
+                            <div class="row m-3 text-center">
+                                <button type="submit" id="signinBtn" class="btn btn-primary">Sign-In</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="importview" role="tabpanel" aria-labelledby="import-tab">
+                    <div class="card">
+                        <div class="card-header font-weight-bold">Import Account</div>
+                        <div class="card-body p-2" id="latestblocks">
+                            <div class="row mb-3">
+                                <div class="input-group">
+                                    <div class="form-file" style="width:100%">
+                                        <button class="btn btn-outline-primary" type="button" id="importBtn">New Account
+                                            Register</button>
+                                        <input type="file" class="form-file-input" id="accountFilePath">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3" id="importResult">
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3" id="importResult">
+                </div>
+                <div class="tab-pane fade" id="createview" role="tabpanel" aria-labelledby="create-tab">
+                    <div class="card">
+                        <div class="card-header font-weight-bold">Create Account</div>
+                        <div class="card-body p-2" id="latestblocks">
+                            <div class="row mb-3">
+                                <label for="inputId" class="col-sm-3 col-form-label">Username</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" id="inputId">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="inputPw" class="col-sm-3 col-form-label">Password</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" id="inputPw">
+                                </div>
+                            </div>
+                            <div class="row m-3 text-center" id="checkfile">
+                            </div>
+                            <div class="row m-3 text-center">
+                                <button type="submit" id="createBtn" class="btn btn-primary">Create Ghost
+                                    Account</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <br>
-        </div>
-        <div class="col-2"></div>
-    </div>
-
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header font-weight-bold">Create Account</div>
-                <div class="card-body p-2" id="latestblocks">
-                    <div class="row mb-3">
-                        <label for="inputId" class="col-sm-3 col-form-label">Username</label>
-                        <div class="col-sm-9">
-                            <input type="email" class="form-control" id="inputId">
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="inputPw" class="col-sm-3 col-form-label">Password</label>
-                        <div class="col-sm-9">
-                            <input type="password" class="form-control" id="inputPw">
-                        </div>
-                    </div>
-                    <div class="row m-3 text-center" id="checkfile">
-                    </div>
-                    <div class="row m-3 text-center">
-                    <button type="submit" id="createBtn" class="btn btn-primary">Create Ghost Account</button>
-                    </div>
-                </div>
-            </div>
-            <br>
         </div>
         <div class="col-2"></div>
     </div>

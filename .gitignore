@@ -110,4 +110,7 @@ dist
 .tern-port
 
 #binary
+bins
+assets
 GhostWebService-linux
+*.png

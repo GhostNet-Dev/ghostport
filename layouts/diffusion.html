@@ -1,0 +1,62 @@
+<div class="container-sm my-3">
+    <div class="row division-line">
+        <div class="col">
+            <h4>AI Image Generator</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-2">
+            <div class="card">
+                <div class="card-header font-weight-bold">Stable Diffusion</div>
+                <div class="card-body p-2">
+                    <div class="row mb-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Prompt</span>
+                            </div>
+                            <input type="text" id="prompt" class="form-control" aria-describedby="basic-addon3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Negative Prompt</span>
+                            </div>
+                            <input type="text" id="nprompt" class="form-control" aria-describedby="basic-addon3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                        <label for="height" class="form-label">Height</label>
+                        <input type="range" id="height" class="form-range" step="0.5" min="1" max="512">
+                        </div>
+                        <div class="col">
+                        <label for="width" class="form-label">Width</label>
+                        <input type="range" id="width" class="form-range" step="0.5" min="1" max="512">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                        <label for="step" class="form-label">Step</label>
+                        <input type="range" id="step" class="form-range" step="0.5" min="2" max="15">
+                        </div>
+                        <div class="col">
+                        <label for="seed" class="form-label">Seed</label>
+                        <input type="text" placeholder="2023" id="seed" class="form-control" aria-describedby="basic-addon3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-2">
+            <button class="btn btn-outline-primary" type="button" id="generateBtn">
+                Generate Image</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-2 text-center" id="printImg">
+        </div>  
+    </div>
+</div>
