@@ -101,13 +101,13 @@ export class GWSMain {
 
     public Run(masterAddr: string): boolean {
         this.init();
+        const btn = document.getElementById("downloadBtn") as HTMLButtonElement
+        btn.onclick = () => this.downloadProgram();
+
         const tag = document.getElementById("selectMaster")
         if (tag == null) return false;
         tag.innerHTML = window.MasterNode.User.Nickname;
 
-
-        const btn = document.getElementById("downloadBtn") as HTMLButtonElement
-        btn.onclick = () => this.downloadProgram();
 
         /*
         const coBtn = document.getElementById("connectBtn") as HTMLButtonElement
