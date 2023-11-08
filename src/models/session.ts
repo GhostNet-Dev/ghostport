@@ -31,14 +31,14 @@ export class Session {
         });
     }
 
-    public SignIn(id: string, pw: string, pubkey: string) {
+    public SignIn(id: string, pw: string, pubkey: string, port: string) {
         this.m_id = id;
         this.m_pw = pw;
         this.m_pubKey = pubkey;
         this.m_signinFlag = true;
         
         this.m_ipc.SendMsg('executeProcess', './bins/' + this.m_blockStore.GetGWSPath(),
-            this.m_id, this.m_pw, '50135');
+            this.m_id, this.m_pw, port);
     }
     
     public GetId(): string { return this.m_id; }

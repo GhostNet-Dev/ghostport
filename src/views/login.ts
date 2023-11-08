@@ -50,7 +50,10 @@ export class Login {
         const accfilename = tag.options[tag.selectedIndex].text;
         const pubkey = accfilename.split('.')[0].split('@')[1];
 
-        this.m_session.SignIn(this.m_id, this.m_pw, pubkey);
+        const portTag = document.getElementById("port") as HTMLInputElement;
+        
+
+        this.m_session.SignIn(this.m_id, this.m_pw, pubkey, portTag.value);
         window.ClickLoadPage("dashboard", false);
     }
     drawHtmlLoading(disable: boolean) {
