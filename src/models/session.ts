@@ -38,7 +38,7 @@ export class Session {
         this.m_signinFlag = true;
         
         this.m_ipc.SendMsg('executeProcess', './bins/' + this.m_blockStore.GetGWSPath(),
-            this.m_id, this.m_pw, '50135');
+            this.m_id, this.m_pw, '50129');
     }
     
     public GetId(): string { return this.m_id; }
