@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from "electron"; // ES impor
 import * as ioutil from "./common/ioutills";
 import * as gwsprocess from "./common/process";
 import * as account from "./common/account";
+import * as utils from "./common/utils";
 import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
 import { FileInfo } from "./models/param.js";
@@ -94,7 +95,22 @@ app.on("ready", () => {
       });
     })
   });
-
+  ipcMain.on("generateImage", (evt, prompt: string, nprompt: string, height: string,
+    width: string, step: string, seed: string) => {
+    const filename = utils.getUnixTick() + ".png";
+    const initFilename = "";
+    gwsprocess.DiffusionProcess(prompt, nprompt, height, width,
+      step, seed, filename, initFilename,
+      (code: number) => {
+        window.webContents.send("reply_generateImage", filename);
+      }, (data: any) => {
+        console.log(`child stdout: ${data}`);
+        window.webContents.send('gwsout', data);
+      }, (data: any) => {
+        console.log(`child stderr: ${data}`);
+        window.webContents.send('gwserr', data);
+      });
+  });
 });
 
 app.on("window-all-closed", () => {

@@ -1,5 +1,6 @@
 import { spawn, ChildProcessWithoutNullStreams } from "child_process";
 import * as fs from "fs"
+import * as path from "path"
 
 let g_gws!: ChildProcessWithoutNullStreams;
 let g_accountRunning: boolean = false;
@@ -58,6 +59,9 @@ export const DiffusionProcess = (prompt: string, nprompt: string, height: string
     width: string, step: string, seed: string, filename: string, initFilename: string,
     exit: Function, out: Function, err: Function) => {
         !fs.existsSync("./outputs") && fs.mkdirSync("./outputs");
+        filename = path.join("./outputs", filename);
+        prompt = prompt.toLowerCase();
+        nprompt = nprompt.toLowerCase();
 
         const sd = spawn("./bins/sd", ['-h', height, '-w', width,
             '-s', step, '-r', seed, '-p', prompt, '-n', nprompt,
