@@ -61,10 +61,11 @@ ENV NODE_ENV=development
 RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git 
 
 ARG DISABLE_CACHE
+ENV DISABLE_CACHE $DISABLE_CACHE
 RUN cd ghoststudio && \
         git pull && \
         npm i -D typescript && npm install -g && \
-        npx tsc -p tsconfig-web.json
+        npx tsc -p tsconfig-web.json && echo ${DISABLE_CACHE}
 
 
 WORKDIR /usr/src/app/ghoststudio
