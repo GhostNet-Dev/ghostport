@@ -40,8 +40,10 @@ const getPageIdParam = () => {
 
 const menuList = new Map([
     ["dashboard", ["main", "login", "dashboard"]], 
+    ["nft", ["nft"]], 
+    ["diffusion", ["diffusion"]], 
+    ["chat", ["chat"]], 
     ["blockscan", ["blockscan", "blockdetail", "txdetail", "accountdetail"]], 
-    ["image", ["diffusion"]], 
     ["chat", [""]], 
     ["account", [""]] ]);
 
