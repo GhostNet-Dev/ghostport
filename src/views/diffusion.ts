@@ -10,7 +10,7 @@ export class Diffusion {
         ipc.RegisterMsgHandler('reply_generateImage', (filename: string) => {
             const printTag = document.getElementById("printImg") as HTMLDivElement;
             printTag.innerHTML = `
-                <img src="./outputs/${filename}">
+                <img src="./outputs/${filename}" class="img-fluid">
             `;
         });
     }
