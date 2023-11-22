@@ -9,6 +9,8 @@ import { Dashboard } from "../views/dashboard";
 import { Diffusion } from "../views/diffusion.js";
 import { Session } from "../models/session";
 import { Ipc } from "../app/ipc";
+import { GScript } from "../views/gscript.js";
+import { Llama } from "../views/llama.js";
 import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -27,6 +29,8 @@ export class AppFactory {
     m_login: Login;
     m_dashboard: Dashboard;
     m_diffusion: Diffusion;
+    m_llama: Llama;
+    m_gscript: GScript;
     m_txDetail: TxDetail;
     m_txInfo: TxInfo;
     m_blockInfo: BlockInfo;
@@ -51,6 +55,8 @@ export class AppFactory {
         this.m_txInfo = new TxInfo(this.m_blockStore);
         this.m_blockInfo = new BlockInfo(this.m_blockStore);
         this.m_accountDetail = new AccountDetail(this.m_blockStore);
+        this.m_llama = new Llama(this.m_blockStore, this.m_ipc)
+        this.m_gscript = new GScript(this.m_blockStore, session)
     }
 
     public Build(): FuncMap {
@@ -60,6 +66,8 @@ export class AppFactory {
             "login": this.m_login,
             "dashboard": this.m_dashboard,
             "diffusion": this.m_diffusion,
+            "gscript": this.m_gscript,
+            "chat": this.m_llama,
             "txdetail": this.m_txDetail,
             "blockdetail": this.m_txInfo,
             "blockscan": this.m_blockInfo,

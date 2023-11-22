@@ -23,6 +23,8 @@ const urlToFileMap: UrlMap = {
     "login": "./layouts/login.html",
     "dashboard": "./layouts/dashboard.html",
     "diffusion": "./layouts/diffusion.html",
+    "chat": "./layouts/llama.html",
+    "gscript": "./layouts/gscript.html",
     "nft": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
     "download": "http://ghostwebservice.com/ghostnetservice/download.html",
