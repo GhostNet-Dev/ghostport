@@ -1,0 +1,12 @@
+Ip: 127.0.0.1
+Port: 50131
+WPort: 58080
+RootPath: "./web/"
+username: "ghostweb"
+SqlPath: ./
+FilePath: ./tmp/
+DbScheme: "db.sqlite3.sql"
+DbSchemePath: ./
+StandaloneMode: false
+Timeout: 8
+BuildDate: "230930_125126"
