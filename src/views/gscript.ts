@@ -1,5 +1,6 @@
 import { BlockStore } from "../store";
 import { Session } from "../models/session";
+import { PrevOutputParam, TxOutputType, TxOutputTypeStr } from "../models/tx.js";
 
 export class GScript {
     m_session: Session
@@ -9,7 +10,55 @@ export class GScript {
         this.m_blockStore = blockStore;
     }
 
+    drawHtmlScriptList(params: PrevOutputParam[]) {
+        const tag = document.getElementById("scriptlist") as HTMLDivElement;
+        tag.innerHTML = `<div class="row mb-3">
+                        <div class="col font-weight-bold">TxId</div>
+                        <div class="col font-weight-bold">Script</div>
+                    </div>`
+        params.forEach(param=>{
+        tag.innerHTML += `
+                    <div class="row mb-3">
+                        <div class="col">${param.VOutPoint.TxId}</div>
+                        <div class="col maxtext" id="${param.VOutPoint.TxId}"></div>
+                    </div>
+                    `
+            const dataTx = encodeURIComponent(param.Vout.ScriptEx)
+            this.m_blockStore.RequestScript(dataTx)
+                .then((res) => {
+                    const tag = document.getElementById(param.VOutPoint.TxId)
+                    if (tag == null) return
+                    tag.innerHTML = res
+                });
+        })
+    }
+    registerScript() {
+        const textTag = document.getElementById("gscript_editor") as HTMLTextAreaElement
+        fetch(location.host + `/newscript`, {
+            method: "POST",
+            body: textTag.value,
+        }).then(res => res.json())
+            .then(txId => {
+                const tag = document.getElementById("result") as HTMLDivElement
+                tag.innerHTML = txId
+            })
+    }
+
     public Run(masterAddr: string): boolean {
+        const tag = document.getElementById("scriptlist") as HTMLDivElement;
+        if (this.m_session.CheckLogin() == false) {
+            tag.innerHTML = `
+                    <div class="row mb-3 text-center"> login을 해야합니다.  </div>
+            `
+            return false
+        }
+        const btn = document.getElementById("registerBtn") as HTMLButtonElement
+        btn.onclick = () => this.registerScript();
+
+        this.m_blockStore.RequestOutputList(TxOutputType.TxTypeScript
+            , this.m_session.GetPubKey(), 0, 50)
+            .then(param => this.drawHtmlScriptList(param))
+
         Function(`
             editAreaLoader.init({
                 id: "gscript_editor", 

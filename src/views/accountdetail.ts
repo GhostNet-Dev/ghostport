@@ -38,7 +38,8 @@ export class AccountDetail {
             bodyTag.innerHTML += `
             <div class="row">
                 <div class="col-6 maxtext"> 
-                    <a class="handcursor maxtext" onclick='ClickLoadPage("txdetail", false, "&txid=${encodeURIComponent(param.VOutPoint.TxId)}")'>
+                    <a class="handcursor maxtext" onclick='ClickLoadPage("txdetail", 
+                        false, "&txid=${encodeURIComponent(param.VOutPoint.TxId)}")'>
                         ${param.VOutPoint.TxId} 
                     </a>
                 </div>
