@@ -58,16 +58,16 @@ RUN apt-get update && apt-get install nodejs -y
 WORKDIR /usr/src/app
 ENV NODE_ENV=development
 #RUN go build main.go
-RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git 
+#RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git 
 
-ARG DISABLE_CACHE
-ENV DISABLE_CACHE $DISABLE_CACHE
-RUN cd ghoststudio && \
-        git pull && \
+#ARG DISABLE_CACHE
+#ENV DISABLE_CACHE $DISABLE_CACHE
+COPY . .
+RUN git pull && \
         npm i -D typescript && npm install -g && \
-        npx tsc -p tsconfig-web.json && echo ${DISABLE_CACHE}
+        npx tsc -p tsconfig-web.json 
 
 
-WORKDIR /usr/src/app/ghoststudio
+WORKDIR /usr/src/app
 ENV NODE_ENV=production
 CMD ["npx", "babel-node", "./dist/server.js"]
