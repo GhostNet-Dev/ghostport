@@ -12,13 +12,15 @@ export class BlockStore {
     m_gwsFilename: string;
     m_ip: string;
     m_os: string;
+    m_masterAddr: string
 
     public constructor() {
-        this.m_minBlockId = MaxUnsignedInt;
-        this.blockInfos = new Array<BlockInfoParam>();
-        this.m_accountMap = new Map<string, AccountParam>();
-        this.m_masterNodes = new Array<GhostWebUser>();
-        this.m_os = this.m_ip = this.m_gwsFilename = "";
+        this.m_minBlockId = MaxUnsignedInt
+        this.blockInfos = new Array<BlockInfoParam>()
+        this.m_accountMap = new Map<string, AccountParam>()
+        this.m_masterNodes = new Array<GhostWebUser>()
+        this.m_os = this.m_ip = this.m_gwsFilename = ""
+        this.m_masterAddr = window.MasterAddr
     }
 
     public SetDeviceInfo(ip: string, os: string) { 
@@ -43,6 +45,12 @@ export class BlockStore {
     public GetMasters() :GhostWebUser[] {
         return this.m_masterNodes;
     } 
+    public set MasterAddr(addr: string) {
+        this.m_masterAddr = addr
+    }
+    public get MasterAddr() {
+        return this.m_masterAddr
+    }
 
     public GetAccount(nick:string): AccountParam|undefined {
         return this.m_accountMap.get(nick);
@@ -68,7 +76,7 @@ export class BlockStore {
         if (account != undefined) {
             return new Promise<AccountParam>(account=>account);
         }
-        return fetch(window.MasterAddr + `/account?addr=${encodeAddr}`)
+        return fetch(this.m_masterAddr + `/account?addr=${encodeAddr}`)
             .then((response) => response.json())
             .then((account:AccountParam)=>{
                 this.m_accountMap.set(account.Nickname, account);
@@ -77,33 +85,37 @@ export class BlockStore {
     }
     public RequestAccountList(start: number, count: number): Promise<AccountParam[]> {
         if (count == null) return Promise.reject();
-        return fetch(window.MasterAddr + `/accountlist?start=${start}&cnt=${count}`)
+        return fetch(this.m_masterAddr + `/accountlist?start=${start}&cnt=${count}`)
             .then((response) => {
                 return response.json();
             });
     }
     public RequestScript(txId: string): Promise<string> {
         if (txId == null) return Promise.reject();
-        return fetch(window.MasterAddr + `/script?txid=${txId}`)
+        return fetch(this.m_masterAddr + `/script?txid=${txId}`)
             .then((response) => response.json());
     }
 
     public RequestTx(txId: string): Promise<TxInfoParam> {
-        return fetch(window.MasterAddr + `/tx?txid=${txId}`)
+        return fetch(this.m_masterAddr + `/tx?txid=${txId}`)
             .then((response) => response.json())
     }
     public RequestOutputList(txtype: TxOutputType, addr: string, start:number, cnt:number): Promise<PrevOutputParam[]> {
-        const encodeAddr = encodeURIComponent(addr);
-        return fetch(window.MasterAddr + `/outputlist?addr=${encodeAddr}&types=${txtype}&start=${start}&cnt=${cnt}`)
-            .then((response) => response.json())
+        const encodeAddr = addr;
+        return fetch(this.m_masterAddr + `/outputlist?addr=${encodeAddr}&types=${txtype}&start=${start}&cnt=${cnt}`)
+            .then((response) => {
+                console.log(this.m_masterAddr + `/outputlist?addr=${encodeAddr}&types=${txtype}&start=${start}&cnt=${cnt}`)
+                console.log(response)
+                return response.json()
+            })
     }
     public RequestBlock(blockId: number): Promise<GhostNetBlock> {
-        return fetch(window.MasterAddr + `/blockdetail?blockid=${blockId}`)
+        return fetch(this.m_masterAddr + `/blockdetail?blockid=${blockId}`)
             .then((response) => response.json())
     }
     public RequestBlockList(start: number, count: number): Promise<BlockInfoParam[]> {
         const promise = 
-            fetch(window.MasterAddr + 
+            fetch(this.m_masterAddr + 
                 "/blocks?start=" + start + "&count=" + count);
         return promise.then((response) => response.json())
     }

@@ -50,6 +50,7 @@ export class Login {
         const pubkey = accfilename.split('.')[0].split('@')[1];
 
         const portTag = document.getElementById("port") as HTMLInputElement;
+        if (portTag.value == "") portTag.value = "50129"
         
 
         this.m_session.SignIn(this.m_id, this.m_pw, pubkey, portTag.value);

@@ -36,6 +36,7 @@ export class Session {
         this.m_pw = pw;
         this.m_pubKey = pubkey;
         this.m_signinFlag = true;
+        this.m_blockStore.MasterAddr = "http://" + location.hostname + ":"
         
         this.m_ipc.SendMsg('executeProcess', './bins/' + this.m_blockStore.GetGWSPath(),
             this.m_id, this.m_pw, port);

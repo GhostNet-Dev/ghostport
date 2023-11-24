@@ -25,10 +25,17 @@ const filedownload = (uri: string, filename: string, callback :Function) => {
     //console.log(request);
 }
 
-const requestHttpGet = (uri: string, filename: string, type: string, filepath: string, callback: Function) => {
+const requestHttpGet = (uri: string, fileinfo: FileInfo, type: string, filepath: string, callback: Function) => {
+    const filename = fileinfo.filename
     if (!fs.existsSync(filepath)) {
         fs.mkdirSync(filepath);
     }
+    if(fs.existsSync(path.join(filepath , filename))) {
+        if (fs.statSync(path.join(filepath , filename)).size == fileinfo.filesize) {
+            return 
+        }
+    }
+
     const file = fs.createWriteStream(path.join(filepath , filename), { mode: 0o777 });
     return http.get(`${uri}/download?type=${type}&os=${process.platform}&filename=${filename}`, (response) => {
         response.pipe(file);
@@ -44,17 +51,29 @@ const requestHttpGet = (uri: string, filename: string, type: string, filepath: s
 
 const downloads = async (uri: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[], callback: Function) => {
     const assetRequests = assetList.map((fileinfo: FileInfo) => {
-        return requestHttpGet(uri, fileinfo.filename, "asset", "./assets", callback)
+        return requestHttpGet(uri, fileinfo, "asset", "./assets", callback)
     });
     const binsRequests = binsList.map((fileinfo: FileInfo) => {
-        return requestHttpGet(uri, fileinfo.filename, "bins", "./bins", callback)
+        return requestHttpGet(uri, fileinfo, "bins", "./bins", callback)
     });
     const libsRequests = libsList.map((fileinfo: FileInfo) => {
-        return requestHttpGet(uri, fileinfo.filename, "libs", "/usr/local/lib", callback)
+        return requestHttpGet(uri, fileinfo, "libs", "/usr/local/lib", callback)
     });
     await Promise.all([
         assetRequests, binsRequests, libsRequests
     ])
+}
+
+const checkAssets = (assetList: FileInfo[]): FileInfo[] => {
+    for (let i = 0; i < assetList.length; i++) {
+        const asset = assetList[i]
+        if(fs.existsSync(path.join("./assets", asset.filename))) {
+            if (fs.statSync(path.join("./assets", asset.filename)).size == asset.filesize) {
+                assetList.splice(i, 1)
+            }
+        }
+    }
+    return assetList
 }
 
 const fileExist = (filepath: string, filename: string):boolean => {

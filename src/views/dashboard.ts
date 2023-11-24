@@ -10,11 +10,9 @@ export class Dashboard {
     }
 
     htmlUpdateInfo() {
-        const nickTag = document.getElementById('nickname');
-        if (nickTag == null) return false;
+        const nickTag = document.getElementById('nickname') as HTMLDivElement
         nickTag.innerHTML = this.m_session.GetId()
-        const pubTag = document.getElementById('pubkey');
-        if (pubTag == null) return false;
+        const pubTag = document.getElementById('pubkey') as HTMLDivElement
         pubTag.innerHTML = this.m_session.GetPubKey()
     }
 
@@ -22,6 +20,7 @@ export class Dashboard {
         if (!this.m_session.CheckLogin()) {
             window.ClickLoadPage("main", false);
         }
+        this.htmlUpdateInfo()
         return true;
     }
 

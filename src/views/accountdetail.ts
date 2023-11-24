@@ -78,7 +78,7 @@ export class AccountDetail {
             .then((param) => this.drawHtml(param))
             .then(() => {
                 this.m_blockStore.RequestOutputList(TxOutputType.TxTypeCoinTransfer
-                    , this.m_accountParam.PubKey, 0, 50)
+                    , encodeURIComponent(this.m_accountParam.PubKey), 0, 50)
                     .then(param => this.drawHtmlCoinList(TxOutputType.TxTypeCoinTransfer, param))
             });
 
