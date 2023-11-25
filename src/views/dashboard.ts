@@ -13,7 +13,7 @@ export class Dashboard {
         const nickTag = document.getElementById('nickname') as HTMLDivElement
         nickTag.innerHTML = this.m_session.GetId()
         const pubTag = document.getElementById('pubkey') as HTMLDivElement
-        pubTag.innerHTML = this.m_session.GetPubKey()
+        pubTag.innerHTML = this.m_session.GetPubAddress()
     }
 
     public Run(masterAddr: string): boolean {

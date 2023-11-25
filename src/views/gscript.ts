@@ -33,11 +33,14 @@ export class GScript {
         })
     }
     registerScript() {
-        const textTag = document.getElementById("gscript_editor") as HTMLTextAreaElement
-        fetch(location.host + `/newscript`, {
+        const tag = document.getElementById("blackbox") as HTMLDivElement
+        console.log(tag.innerHTML)
+        fetch(`${this.m_blockStore.MasterAddr}/newscript`, {
             method: "POST",
-            body: textTag.value,
-        }).then(res => res.json())
+            body: tag.innerHTML,
+        }).then(res => {
+            console.log(res)
+            return res.json()})
             .then(txId => {
                 const tag = document.getElementById("result") as HTMLDivElement
                 tag.innerHTML = txId
@@ -53,10 +56,10 @@ export class GScript {
             return false
         }
         const btn = document.getElementById("registerBtn") as HTMLButtonElement
-        btn.onclick = () => this.registerScript();
+        btn.addEventListener("click", this.registerScript.bind(this))
 
         this.m_blockStore.RequestOutputList(TxOutputType.TxTypeScript
-            , this.m_session.GetPubKey(), 0, 50)
+            , encodeURIComponent(this.m_session.GetPubKey()), 0, 50)
             .then(param => this.drawHtmlScriptList(param))
 
         Function(`

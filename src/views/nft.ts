@@ -15,7 +15,7 @@ export class Nft {
         nickTag.innerHTML = this.m_session.GetId()
         const pubTag = document.getElementById('pubkey');
         if (pubTag == null) return false;
-        pubTag.innerHTML = this.m_session.GetPubKey()
+        pubTag.innerHTML = this.m_session.GetPubAddress()
     }
 
     public Run(masterAddr: string): boolean {

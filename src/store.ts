@@ -83,6 +83,13 @@ export class BlockStore {
                 return account;
             });
     }
+    public RequestAccountbyNick(nickname: string): Promise<string> {
+        return fetch(this.m_masterAddr + `/getpubkey?nickname=${nickname}`)
+            .then((response) => {
+                console.log(response)
+                return response.json()
+            });
+    }
     public RequestAccountList(start: number, count: number): Promise<AccountParam[]> {
         if (count == null) return Promise.reject();
         return fetch(this.m_masterAddr + `/accountlist?start=${start}&cnt=${count}`)
