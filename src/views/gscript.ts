@@ -12,29 +12,33 @@ export class GScript {
 
     drawHtmlScriptList(params: PrevOutputParam[]) {
         const tag = document.getElementById("scriptlist") as HTMLDivElement;
-        tag.innerHTML = `<div class="row mb-3">
-                        <div class="col font-weight-bold">TxId</div>
-                        <div class="col font-weight-bold">Script</div>
-                    </div>`
-        params.forEach(param=>{
+        tag.innerHTML = ``
+        params.forEach(param => {
         tag.innerHTML += `
-                    <div class="row mb-3">
-                        <div class="col">${param.VOutPoint.TxId}</div>
-                        <div class="col maxtext" id="${param.VOutPoint.TxId}"></div>
+                    <div class="row m-3">
+                        <div class="col">
+                            <a id="${param.VOutPoint.TxId}_link" class="handcursor">
+                            ${param.VOutPoint.TxId}
+                            </a></div>
+                        <div class="col maxtext handcursor" id="${param.VOutPoint.TxId}"></div>
                     </div>
                     `
             const dataTx = encodeURIComponent(param.Vout.ScriptEx)
             this.m_blockStore.RequestScript(dataTx)
                 .then((res) => {
-                    const tag = document.getElementById(param.VOutPoint.TxId)
-                    if (tag == null) return
+                    const tag = document.getElementById(param.VOutPoint.TxId) as HTMLDivElement
                     tag.innerHTML = res
+                    const loadCode =  () => {
+                        Function(" editAreaLoader.setValue('gscript_editor', `" + res + "`) ")()
+                    }
+                    tag.onclick = loadCode
+                    const linkTag = document.getElementById(param.VOutPoint.TxId + "_link")
+                    if (linkTag != null) linkTag.onclick = loadCode
                 });
         })
     }
     registerScript() {
         const tag = document.getElementById("blackbox") as HTMLDivElement
-        console.log(tag.innerHTML)
         fetch(`${this.m_blockStore.MasterAddr}/newscript`, {
             method: "POST",
             body: tag.innerHTML,
