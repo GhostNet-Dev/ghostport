@@ -8,6 +8,7 @@ import { AccountDetail } from "../views/accountdetail";
 import { Dashboard } from "../views/dashboard";
 import { Diffusion } from "../views/diffusion.js";
 import { Session } from "../models/session";
+import { FuncMap } from "../models/type.js";
 import { Ipc } from "../app/ipc";
 import { GScript } from "../views/gscript.js";
 import { Llama } from "../views/llama.js";
@@ -15,12 +16,6 @@ import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 
-interface IPage {
-    Run(str: string): boolean;
-    Release(): void;
-}
-
-type FuncMap = { [key: string]: IPage };
 
 export class AppFactory {
     m_term: Terminal;

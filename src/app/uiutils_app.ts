@@ -1,14 +1,37 @@
 import "module-alias/register"
-import { factory, includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from "@src/app/ghostapp.js";
+import { AppFactory } from "@src/factory/appfactory";
+import { GhostWebUser } from "@src/models/param";
+import { Base } from "@src/views/base";
 import * as config from "@src/models/config.js";
 
-includeHTML("header", "navbar.html");
-includeHTML("footer", "foot.html");
+export const factory = new AppFactory();
+const blockStore = factory.GetBlockStore();
+const funcMap = factory.Build();
 
-addEventListener("load", () =>
+const base = new Base("./", funcMap, blockStore)
+
+
+window.ClickLoadPage = (key: string, fromEvent: boolean, ...args: string[]) => {
+    base.ClickLoadPage(key, fromEvent, ...args)
+}
+
+window.onpopstate = (event) => {
+    //window.ClickLoadPage(event.state['key'], event.state['fromEvent'], event.state['args'])
+    base.includeContentHTML(window.MasterAddr)
+};
+
+base.InitIncludeHTML()
+
+const parseResponse = (nodes: GhostWebUser[]): GhostWebUser => {
+    return base.parseResponse(nodes)
+}
+
+
+addEventListener("load", () => {
     fetch(config.RootAddress + "/nodes")
         .then((response) => response.json())
         .then(parseResponse)
-        .then(loadNodesHtml)
-        .then((url) => includeContentHTML(url))
-        .then(() => factory.OpenTerminal()));
+        .then(base.loadNodesHtml)
+        .then((url) => base.includeContentHTML(url))
+});
+

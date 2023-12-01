@@ -8,16 +8,10 @@ import { AccountDetail } from "../views/accountdetail.js";
 import { Dashboard } from "../views/dashboard.js";
 import { Diffusion } from "../views/diffusion.js";
 import { Session } from "../models/session.js";
+import { FuncMap } from "../models/type.js";
 import { Socket } from "../web/socket.js";
 import { GScript } from "../views/gscript.js";
 import { Llama } from "../views/llama.js";
-
-interface IPage {
-    Run(str: string): boolean;
-    Release(): void;
-}
-
-type FuncMap = { [key: string]: IPage };
 
 export class WebFactory {
     m_blockStore: BlockStore;

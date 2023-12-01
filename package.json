@@ -1,5 +1,5 @@
 {
-  "name": "ghostport",
+  "name": "ghoststudio",
   "version": "1.0.0",
   "description": "",
   "main": "dist/main.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GhostNet-Dev/ghostport.git"
+    "url": "git+https://github.com/GhostNet-Dev/ghoststudio.git"
   },
   "keywords": [
     "blockchain"
@@ -21,9 +21,9 @@
   "author": "ghost",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/GhostNet-Dev/ghostport/issues"
+    "url": "https://github.com/GhostNet-Dev/ghoststudio/issues"
   },
-  "homepage": "https://github.com/GhostNet-Dev/ghostport#readme",
+  "homepage": "https://github.com/GhostNet-Dev/ghoststudio#readme",
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/node": "^7.22.19",
