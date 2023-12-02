@@ -5,9 +5,10 @@ import * as config from "../models/config.js";
 
 const factory = new WebFactory();
 const blockStore = factory.GetBlockStore();
+const session = factory.GetSession();
 const funcMap = factory.Build();
 
-const base = new Base("../", funcMap, blockStore)
+const base = new Base("../", funcMap, blockStore, session)
 
 window.ClickLoadPage = (key: string, fromEvent: boolean, ...args: string[]) => {
     base.ClickLoadPage(key, fromEvent, ...args)
@@ -22,6 +23,9 @@ window.onpopstate = (event) => {
 const parseResponse = (nodes: GhostWebUser[]): GhostWebUser => {
     return base.parseResponse(nodes)
 }
+const loadNodeHtml = (node: GhostWebUser): string => {
+    return base.loadNodesHtml(node)
+}
 
 base.InitIncludeHTML()
 
@@ -29,6 +33,6 @@ addEventListener("load", () => {
     fetch(config.RootAddress + "/nodes")
         .then((response) => response.json())
         .then(parseResponse)
-        .then(base.loadNodesHtml)
+        .then(loadNodeHtml)
         .then((url) => base.includeContentHTML(url))
 });

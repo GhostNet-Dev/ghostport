@@ -1,5 +1,6 @@
 import { BlockStore } from "../store.js";
 import { FuncMap } from "../models/type.js";
+import { Session } from "../models/session.js";
 import { GhostWebUser } from "../models/param.js";
 type UrlMap = { [key: string]: string; }
 
@@ -9,9 +10,10 @@ export class Base {
     urlToFileMap: UrlMap
     beforPage: string
     funcMap: FuncMap
-    blockStore: BlockStore
+    m_blockStore: BlockStore
+    m_session: Session
 
-    constructor(basePath: string, funcMap: FuncMap, blockStore: BlockStore) {
+    constructor(basePath: string, funcMap: FuncMap, blockStore: BlockStore, session: Session) {
         this.m_basePath = basePath
         this.menuList = new Map([
             ["dashboard", ["main", "login", "dashboard"]],
@@ -39,7 +41,8 @@ export class Base {
         };
         this.beforPage = ""
         this.funcMap = funcMap
-        this.blockStore = blockStore
+        this.m_blockStore = blockStore
+        this.m_session = session
     }
     getPageIdParam() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -89,7 +92,7 @@ export class Base {
 
     public parseResponse(nodes: GhostWebUser[]) {
         let randIdx = Math.floor(Math.random() * nodes.length);
-        this.blockStore.AddMasters(nodes);
+        this.m_blockStore.AddMasters(nodes);
         window.NodeCount = nodes.length;
         console.log(nodes);
         return nodes[randIdx];
@@ -98,6 +101,7 @@ export class Base {
     public loadNodesHtml(node: GhostWebUser) {
         window.MasterNode = node;
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
+        this.m_blockStore.MasterAddr = window.MasterAddr
         return window.MasterAddr;
     };
     public includeHTML(id: string, filename: string) {

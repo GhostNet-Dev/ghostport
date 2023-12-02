@@ -31,6 +31,7 @@ export class AppFactory {
     m_blockInfo: BlockInfo;
     m_accountDetail: AccountDetail;
     m_ipc: Ipc;
+    m_session: Session
 
     public constructor() {
         this.m_term = new Terminal({
@@ -40,18 +41,18 @@ export class AppFactory {
         });
         this.m_blockStore = new BlockStore();
         this.m_ipc = new Ipc();
-        const session = new Session(this.m_blockStore, this.m_term, this.m_ipc);
+        this.m_session = new Session(this.m_blockStore, this.m_term, this.m_ipc);
 
         this.m_gwsMain = new GWSMain(this.m_blockStore, this.m_ipc);
-        this.m_login = new Login(this.m_blockStore, session, this.m_ipc);
-        this.m_dashboard = new Dashboard(this.m_blockStore, session);
+        this.m_login = new Login(this.m_blockStore, this.m_session, this.m_ipc);
+        this.m_dashboard = new Dashboard(this.m_blockStore, this.m_session);
         this.m_diffusion = new Diffusion(this.m_blockStore, this.m_ipc)
         this.m_txDetail = new TxDetail(this.m_blockStore);
         this.m_txInfo = new TxInfo(this.m_blockStore);
         this.m_blockInfo = new BlockInfo(this.m_blockStore);
         this.m_accountDetail = new AccountDetail(this.m_blockStore);
         this.m_llama = new Llama(this.m_blockStore, this.m_ipc)
-        this.m_gscript = new GScript(this.m_blockStore, session)
+        this.m_gscript = new GScript(this.m_blockStore, this.m_session)
     }
 
     public Build(): FuncMap {
@@ -72,6 +73,7 @@ export class AppFactory {
     }
 
     public GetBlockStore(): BlockStore { return this.m_blockStore; }
+    public GetSession(): Session { return this.m_session; }
 
     public OpenTerminal() {
         const _fitAddon = new FitAddon()

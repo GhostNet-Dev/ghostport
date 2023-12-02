@@ -4,6 +4,7 @@ import { PrevOutputParam, TxOutputType } from "./models/tx.js";
 
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
 
+
 export class BlockStore {
     blockInfos: BlockInfoParam[];
     m_minBlockId: number;

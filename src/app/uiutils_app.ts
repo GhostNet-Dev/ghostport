@@ -6,9 +6,10 @@ import * as config from "@src/models/config.js";
 
 export const factory = new AppFactory();
 const blockStore = factory.GetBlockStore();
+const session = factory.GetSession();
 const funcMap = factory.Build();
 
-const base = new Base("./", funcMap, blockStore)
+const base = new Base("./", funcMap, blockStore, session)
 
 
 window.ClickLoadPage = (key: string, fromEvent: boolean, ...args: string[]) => {

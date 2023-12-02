@@ -20,6 +20,7 @@ export class Dashboard {
         if (!this.m_session.CheckLogin()) {
             window.ClickLoadPage("main", false);
         }
+        this.m_session.SessionCheck()
         this.htmlUpdateInfo()
         return true;
     }
