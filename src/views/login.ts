@@ -38,7 +38,7 @@ export class Login {
         btn.disabled = true;
         this.drawHtmlLoading(true);
         this.m_ipc.SendMsg('createProcess', './bins/' + this.m_blockStore.GetGWSPath(),
-            this.m_id, this.m_pw, '50135');
+            this.m_id, this.m_pw, '50129');
     }
     login() {
         const tag = document.getElementById("accountList") as HTMLSelectElement;
