@@ -86,8 +86,8 @@ export class Diffusion {
     drawHtmlUpdateModelList() {
         const models = new Map()
         models.set("UNetModel", "UNetModel")
-        models.set("SD-v1.4", "sd-v1-4-ggml-model-f16.bin")
-        models.set("chiled-remix", "chilled_remix_v2-ggml-model-f16.bin")
+        models.set("SD-v1.4", "sd-v1-4-f16.bin")
+        models.set("chiled-remix", "chilled_reversemix_v2-f16.bin")
 
         const tag = document.getElementById("modellist")
         if (tag == null) return;

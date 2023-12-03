@@ -1,2 +1,2 @@
 
-export const RootAddress = "http://ghostnetroot.com:58083";
+export const RootAddress = "http://lb.ghostnetroot.com:58083";
