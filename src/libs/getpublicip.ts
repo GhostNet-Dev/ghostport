@@ -1,12 +1,11 @@
 import http from 'http'
 
 function GetPublicIp(callback: Function) {
-        /*
     fetch("https://api.ipify.org?format=json", { method: 'GET' })
         .then(res => res.json())
         .then(data => callback(data.ip));
-    */
 
+        /*
     // Set the URL of the request to the ipify API
     const options = {
         host: 'api.ipify.org',
@@ -36,6 +35,7 @@ function GetPublicIp(callback: Function) {
     // Send the request
     req.end();
     return req;
+    */
 }
 
 export { GetPublicIp }
