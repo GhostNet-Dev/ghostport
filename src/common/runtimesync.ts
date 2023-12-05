@@ -49,6 +49,7 @@ export class RunTimeSync {
                     this.GetDownloadList()
                 }
             })
+            .catch((err) => console.log(err))
         setTimeout(() => { this.CheckNewRelease() }, this.m_interval)
     }
 
