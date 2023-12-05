@@ -16,3 +16,6 @@ docker_build:
 
 docker_run:
 	docker run -it --rm --name ghostd -v ghost:/usr/src/app --net=host -p 8090:8090 -p 8091:8091 -p 50129:50129/udp -p 58080:58080 ghost
+
+docker_clean:
+	docker system prune --volumes
