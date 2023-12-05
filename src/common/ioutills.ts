@@ -4,7 +4,7 @@ import * as fs from "fs";
 import checkDiskSpace from 'check-disk-space'
 import { FileInfo } from "../models/param.js";
 
-const filedownload = (uri: string, filename: string, callback :Function) => {
+export const filedownload = (uri: string, filename: string, callback :Function) => {
     const file = fs.createWriteStream(filename, {mode: 0o777});
     const url = `${uri}/gws?os=${process.platform}`;
 
@@ -51,7 +51,7 @@ const requestHttpGet = (uri: string, fileinfo: FileInfo, type: string, filepath:
     })
 }
 
-const downloads = async (uri: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[], callback: Function) => {
+export const downloads = async (uri: string, assetList: FileInfo[], binsList: FileInfo[], libsList: FileInfo[], callback: Function) => {
     const assetRequests = assetList.map((fileinfo: FileInfo) => {
         return requestHttpGet(uri, fileinfo, "asset", "./assets", callback)
     });
@@ -78,7 +78,7 @@ const checkAssets = (assetList: FileInfo[]): FileInfo[] => {
     return assetList
 }
 
-const fileExist = (filepath: string, filename: string):boolean => {
+export const fileExist = (filepath: string, filename: string):boolean => {
     let ret = false;
     if (!fs.existsSync(filepath)) {
         fs.mkdirSync(filepath);
@@ -95,7 +95,7 @@ const fileExist = (filepath: string, filename: string):boolean => {
     return ret;
 }
 
-const getDiskSpace = (filepath: string, callback: Function) => {
+export const getDiskSpace = (filepath: string, callback: Function) => {
     checkDiskSpace(filepath).then((diskSpace) => {
         callback(diskSpace)
         // {
@@ -107,8 +107,6 @@ const getDiskSpace = (filepath: string, callback: Function) => {
     })
 }
 
-const fileWrite = (filepath: string, file: ArrayBuffer) => {
+export const fileWrite = (filepath: string, file: ArrayBuffer) => {
     fs.writeFile(filepath, new DataView(file), 'binary', (err) => { console.log(err) })
 }
-
-export { getDiskSpace, filedownload, fileExist, fileWrite, downloads}

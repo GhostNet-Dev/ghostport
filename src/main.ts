@@ -6,9 +6,12 @@ import * as utils from "./common/utils";
 import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
 import { FileInfo } from "./models/param.js";
+import { RunTimeSync } from './common/runtimesync';
 
 let window: BrowserWindow;
 let g_ip: string;
+
+const g_sync = new RunTimeSync(1000 * 60)
 GetPublicIp((ip: string) => {
   console.log(ip);
   g_ip = ip;
@@ -52,6 +55,7 @@ app.on("ready", () => {
     }, (data: any) => {
       window.webContents.send('gwserr', data);
     })
+    g_sync.MonitoringStart()
   });
 
   ipcMain.on('createProcess', (evt, gwsPath: string, id: string, pw: string, port: string) => {

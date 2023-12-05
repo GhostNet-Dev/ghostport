@@ -5,15 +5,21 @@ import * as path from "path"
 let g_gws!: ChildProcessWithoutNullStreams;
 let g_accountRunning: boolean = false;
 let g_running: boolean = false;
+const controller = new AbortController()
+const { signal } = controller
 
 export const CheckRunning = (): boolean => {
     return g_running;
 }
 
+export const AbortService = () => {
+    controller.abort()
+}
+
 export const CreateAccount = (gwsPath: string, id: string, pw: string, 
     ip: string, port: string, callback: Function) => {
     const gws = spawn(gwsPath, ['create', '-u', id, '-p', pw,
-        '--ip', ip, '--port', port]);
+        '--ip', ip, '--port', port], { signal });
     g_accountRunning = true;
 
     gws.on('exit', function (code, signal) {
@@ -31,9 +37,25 @@ export const CreateAccount = (gwsPath: string, id: string, pw: string,
     })
 }
 
+let g_id: string
+let g_pw: string
+let g_ip: string
+let g_port: string
+let g_wport: string
+let g_exit: Function
+let g_out: Function
+let g_err: Function
+
+export const RestartProcess = (gwsPath: string) => {
+    ExecuteProcess(gwsPath, g_id, g_pw, g_ip, g_port, g_wport, g_exit, g_out, g_err)
+}
+
 export const ExecuteProcess = (gwsPath: string, id: string, pw: string, 
     ip: string, port: string, wport:string, exit: Function, out: Function, err: Function) => {
         if (g_running == true) return;
+
+        g_id = id; g_pw = pw; g_ip = ip; g_port = port
+        g_wport = wport; g_exit = exit; g_out = out; g_err = err
 
         g_gws = spawn(gwsPath, ['-u', id, '-p', pw,
             '--ip', ip, '--port', port, '--wport', wport])

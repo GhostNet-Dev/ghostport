@@ -15,3 +15,11 @@ interface IPage {
 }
 
 export type FuncMap = { [key: string]: IPage };
+
+export type UserAccount = {
+    id: string,
+    pw: string,
+    ip: string,
+    port: string,
+    wport: string,
+}

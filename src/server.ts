@@ -9,12 +9,14 @@ import { Handler, C2SMsg } from './web/socket';
 import { GetPublicIp } from "./libs/getpublicip";
 import { LocalSession } from "./web/session";
 import { FileInfo } from "./models/param.js";
+import { RunTimeSync } from './common/runtimesync';
 
 const mime = require('mime');
 const WebSocketServer = require('ws');
 let g_ip: string;
 
 const g_session = new LocalSession();
+const g_sync = new RunTimeSync(1000 * 60)
 
 GetPublicIp((ip: string) => {
     console.log(ip);
@@ -73,6 +75,7 @@ const g_handler: Handler = {
             console.log(`child stderr: ${data}`);
             ws.send(JSON.stringify({ types: "gwserr", params: data }));
         })
+        g_sync.MonitoringStart()
     },
     "createProcess": (ws: any, gwsPath: string, id: string, pw: string, port: string) => {
         gwsprocess.CreateAccount(gwsPath, id, pw, g_ip, port, () => {
