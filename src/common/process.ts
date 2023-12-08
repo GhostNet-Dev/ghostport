@@ -13,7 +13,18 @@ export const CheckRunning = (): boolean => {
 }
 
 export const AbortService = () => {
-    controller.abort()
+    //controller.abort()
+    //if (g_gws == undefined || g_gws.pid == undefined) return
+    //process.kill(-g_gws.pid, 'SIGTERM')
+    try {
+        g_gws.stdout.pause()
+        g_gws.stderr.pause()
+        g_gws.kill()
+    } catch (e) {
+        console.log(e)
+    }
+    g_running = false
+    console.log("abort and restart")
 }
 
 export const CreateAccount = (gwsPath: string, id: string, pw: string, 
@@ -28,7 +39,6 @@ export const CreateAccount = (gwsPath: string, id: string, pw: string,
         g_accountRunning = false;
         callback();
     })
-
     gws.stdout.on('data', data => {
         console.log(`child stdout: ${data}`);
     })
@@ -58,7 +68,7 @@ export const ExecuteProcess = (gwsPath: string, id: string, pw: string,
         g_wport = wport; g_exit = exit; g_out = out; g_err = err
 
         g_gws = spawn(gwsPath, ['-u', id, '-p', pw,
-            '--ip', ip, '--port', port, '--wport', wport])
+            '--ip', ip, '--port', port, '--wport', wport], { signal })
         g_running = true;
 
         g_gws.on('exit', function (code, signal) {
@@ -67,6 +77,9 @@ export const ExecuteProcess = (gwsPath: string, id: string, pw: string,
             g_running = false;
             console.log("exit program : ", code)
             exit(code)
+        })
+        g_gws.on('err', err => {
+            console.log(err)
         })
 
         g_gws.stdout.on('data', data => {

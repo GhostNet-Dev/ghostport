@@ -38,6 +38,7 @@ export class RunTimeSync {
         fetch(config.RootAddress + "/info?os=" + this.m_os)
             .then((response) => response.json())
             .then((info)=> {
+                console.log(info)
                 const filename = (this.m_os == "win32") ? "GhostWebService-windows-" + info.BuildDate + ".exe" :
                     `GhostWebService-${this.m_os}-${info.BuildDate}`;
                 this.m_gwsPath = filename
@@ -45,9 +46,10 @@ export class RunTimeSync {
                 if (this.m_buildVersion == "") {
                     this.m_buildVersion = info.BuildDate
                 }
-                if (this.m_buildVersion != info.BuildDate) {
+                //if (this.m_buildVersion != info.BuildDate) {
+                    console.log(this.m_buildVersion, " != ", info.BuildDate)
                     this.GetDownloadList()
-                }
+                //}
             })
             .catch((err) => console.log(err))
         setTimeout(() => { this.CheckNewRelease() }, this.m_interval)
@@ -77,7 +79,7 @@ export class RunTimeSync {
                 let downloaded = 0
                 ioutil.downloads(config.RootAddress, this.m_assetList, 
                     this.m_binsList, this.m_libsList, (filename: string) => {
-                        console.log("[", downloaded, "]download: ", filename)
+                        //console.log("[", downloaded, "]download: ", filename)
                         downloaded++
                         if (downloaded == totalDownload) {
                             this.switchProcess()
@@ -93,6 +95,8 @@ export class RunTimeSync {
         if (gwsprocess.CheckRunning()) {
             gwsprocess.AbortService()
         }
-        gwsprocess.RestartProcess(this.m_gwsPath)
+        setTimeout(() => {
+            gwsprocess.RestartProcess("./bins/" + this.m_gwsPath)
+        }, 2000)
     }
 }
