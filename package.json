@@ -9,7 +9,7 @@
   "scripts": {
     "compile": "tsc && copyfiles -f index.html dist",
     "start": "npm run compile && cross-env DEBUG=true electron .",
-    "web": "npx tsc -p tsconfig-web.json && npx babel-node ./dist/server.js",
+    "docker": "git pull && npx tsc -p tsconfig-web.json && npx babel-node ./dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
