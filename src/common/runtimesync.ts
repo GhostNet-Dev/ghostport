@@ -46,10 +46,10 @@ export class RunTimeSync {
                 if (this.m_buildVersion == "") {
                     this.m_buildVersion = info.BuildDate
                 }
-                //if (this.m_buildVersion != info.BuildDate) {
+                if (this.m_buildVersion != info.BuildDate) {
                     console.log(this.m_buildVersion, " != ", info.BuildDate)
                     this.GetDownloadList()
-                //}
+                }
             })
             .catch((err) => console.log(err))
         setTimeout(() => { this.CheckNewRelease() }, this.m_interval)

@@ -5,8 +5,6 @@ import * as path from "path"
 let g_gws!: ChildProcessWithoutNullStreams;
 let g_accountRunning: boolean = false;
 let g_running: boolean = false;
-const controller = new AbortController()
-const { signal } = controller
 
 export const CheckRunning = (): boolean => {
     return g_running;
@@ -30,7 +28,7 @@ export const AbortService = () => {
 export const CreateAccount = (gwsPath: string, id: string, pw: string, 
     ip: string, port: string, callback: Function) => {
     const gws = spawn(gwsPath, ['create', '-u', id, '-p', pw,
-        '--ip', ip, '--port', port], { signal });
+        '--ip', ip, '--port', port]);
     g_accountRunning = true;
 
     gws.on('exit', function (code, signal) {
@@ -68,7 +66,7 @@ export const ExecuteProcess = (gwsPath: string, id: string, pw: string,
         g_wport = wport; g_exit = exit; g_out = out; g_err = err
 
         g_gws = spawn(gwsPath, ['-u', id, '-p', pw,
-            '--ip', ip, '--port', port, '--wport', wport], { signal })
+            '--ip', ip, '--port', port, '--wport', wport])
         g_running = true;
 
         g_gws.on('exit', function (code, signal) {
