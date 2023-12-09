@@ -1,10 +1,14 @@
-import { spawn, ChildProcessWithoutNullStreams } from "child_process";
+import { execSync, spawn, ChildProcessWithoutNullStreams } from "child_process";
 import * as fs from "fs"
 import * as path from "path"
 
 let g_gws!: ChildProcessWithoutNullStreams;
 let g_accountRunning: boolean = false;
 let g_running: boolean = false;
+
+export const GetRevision = (): string => {
+    return execSync('git rev-parse HEAD').toString().trim().substring(0, 5)
+}
 
 export const CheckRunning = (): boolean => {
     return g_running;

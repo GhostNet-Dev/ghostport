@@ -88,6 +88,7 @@ const g_handler: Handler = {
             Ip: g_ip, 
             Os: process.platform,
             Run: gwsprocess.CheckRunning(),
+            Revision: gwsprocess.GetRevision()
         }
         }));
     },

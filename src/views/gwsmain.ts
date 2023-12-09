@@ -37,6 +37,8 @@ export class GWSMain {
             console.log(ret);
             this.m_blockStore.SetDeviceInfo(ret.Ip, ret.Os);
             this.m_syncVersion.CheckVersion(ret.Os);
+            const tag = document.getElementById('revision_info');
+            if (tag != null) tag.innerHTML = `revision - ${ret.Revision}`
         });
     }
     drawHtmlStart() {

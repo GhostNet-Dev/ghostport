@@ -68,6 +68,7 @@ app.on("ready", () => {
       Ip: g_ip, 
       Os: process.platform,
       Run: gwsprocess.CheckRunning(),
+      Revision: gwsprocess.GetRevision()
     });
   });
   ipcMain.on('getIp', (evt) => {

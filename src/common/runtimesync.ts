@@ -49,6 +49,7 @@ export class RunTimeSync {
                 if (this.m_buildVersion != info.BuildDate) {
                     console.log(this.m_buildVersion, " != ", info.BuildDate)
                     this.GetDownloadList()
+                    this.m_buildVersion = info.BuildDate
                 }
             })
             .catch((err) => console.log(err))
