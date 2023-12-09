@@ -63,11 +63,9 @@ ENV NODE_ENV=development
 #ARG DISABLE_CACHE
 #ENV DISABLE_CACHE $DISABLE_CACHE
 COPY . .
-RUN git pull && \
-        npm i -D typescript && npm install -g && \
-        npx tsc -p tsconfig-web.json 
+RUN npm i -D typescript && npm install -g
 
 
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
-CMD ["npx", "babel-node", "./dist/server.js"]
+CMD ["npm", "run", "docker"]
