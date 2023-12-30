@@ -30,7 +30,7 @@ const requestHttpGet = (uri: string, fileinfo: FileInfo, type: string, filepath:
     if (!fs.existsSync(filepath)) {
         fs.mkdirSync(filepath);
     }
-    if(fs.existsSync(path.join(filepath , filename))) {
+    if(fs.existsSync(path.join(filepath , filename)) && type == "asset") {
         if (fs.statSync(path.join(filepath , filename)).size == fileinfo.filesize) {
             console.log("skip Download - ", filename);
             callback(filename);
