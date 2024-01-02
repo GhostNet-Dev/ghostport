@@ -12,6 +12,8 @@ import { FuncMap } from "../models/type.js";
 import { Socket } from "../web/socket.js";
 import { GScript } from "../views/gscript.js";
 import { Llama } from "../views/llama.js";
+import { Logger } from "../models/logger.js";
+import { Setup } from "../views/setup.js";
 
 export class WebFactory {
     m_blockStore: BlockStore;
@@ -27,6 +29,8 @@ export class WebFactory {
     m_accountDetail: AccountDetail;
     m_socket: Socket;
     m_session: Session;
+    m_logs: Logger
+    m_setup: Setup
 
     public constructor() {
         this.m_blockStore = new BlockStore();
@@ -36,7 +40,7 @@ export class WebFactory {
 
         this.m_gwsMain = new GWSMain(this.m_blockStore, this.m_socket);
         this.m_login = new Login(this.m_blockStore, this.m_session, this.m_socket);
-        this.m_dashboard = new Dashboard(this.m_blockStore, this.m_session);
+        this.m_dashboard = new Dashboard(this.m_blockStore, this.m_session, this.m_socket);
         this.m_diffusion = new Diffusion(this.m_blockStore, this.m_socket)
         this.m_txDetail = new TxDetail(this.m_blockStore);
         this.m_txInfo = new TxInfo(this.m_blockStore);
@@ -44,6 +48,8 @@ export class WebFactory {
         this.m_accountDetail = new AccountDetail(this.m_blockStore);
         this.m_llama = new Llama(this.m_blockStore, this.m_socket)
         this.m_gscript = new GScript(this.m_blockStore, this.m_session)
+        this.m_logs = new Logger()
+        this.m_setup = new Setup(this.m_blockStore, this.m_session, this.m_socket)
     }
 
     public Build(): FuncMap {
@@ -59,10 +65,12 @@ export class WebFactory {
             "blockdetail": this.m_txInfo,
             "blockscan": this.m_blockInfo,
             "accountdetail": this.m_accountDetail,
+            "setup": this.m_setup,
         };
         return funcMap;
     }
 
     public GetBlockStore(): BlockStore { return this.m_blockStore; }
     public GetSession(): Session { return this.m_session; }
+    get Logs(): Logger { return this.m_logs }
 }

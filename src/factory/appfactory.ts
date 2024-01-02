@@ -15,6 +15,8 @@ import { Llama } from "../views/llama.js";
 import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
+import { Logger } from "../models/logger";
+import { Setup } from "../views/setup.js";
 
 
 export class AppFactory {
@@ -32,6 +34,8 @@ export class AppFactory {
     m_accountDetail: AccountDetail;
     m_ipc: Ipc;
     m_session: Session
+    m_logs: Logger
+    m_setup: Setup
 
     public constructor() {
         this.m_term = new Terminal({
@@ -45,7 +49,7 @@ export class AppFactory {
 
         this.m_gwsMain = new GWSMain(this.m_blockStore, this.m_ipc);
         this.m_login = new Login(this.m_blockStore, this.m_session, this.m_ipc);
-        this.m_dashboard = new Dashboard(this.m_blockStore, this.m_session);
+        this.m_dashboard = new Dashboard(this.m_blockStore, this.m_session, this.m_ipc);
         this.m_diffusion = new Diffusion(this.m_blockStore, this.m_ipc)
         this.m_txDetail = new TxDetail(this.m_blockStore);
         this.m_txInfo = new TxInfo(this.m_blockStore);
@@ -53,6 +57,8 @@ export class AppFactory {
         this.m_accountDetail = new AccountDetail(this.m_blockStore);
         this.m_llama = new Llama(this.m_blockStore, this.m_ipc)
         this.m_gscript = new GScript(this.m_blockStore, this.m_session)
+        this.m_logs = new Logger()
+        this.m_setup = new Setup(this.m_blockStore, this.m_session, this.m_ipc)
     }
 
     public Build(): FuncMap {
@@ -68,6 +74,7 @@ export class AppFactory {
             "blockdetail": this.m_txInfo,
             "blockscan": this.m_blockInfo,
             "accountdetail": this.m_accountDetail,
+            "setup": this.m_setup,
         };
         return funcMap;
     }
@@ -87,4 +94,5 @@ export class AppFactory {
             _fitAddon.fit()
         }
     }
+    get Logs(): Logger { return this.m_logs }
 }

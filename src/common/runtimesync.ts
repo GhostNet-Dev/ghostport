@@ -38,7 +38,7 @@ export class RunTimeSync {
         fetch(config.RootAddress + "/info?os=" + this.m_os)
             .then((response) => response.json())
             .then((info)=> {
-                console.log(info)
+                //console.log(info)
                 const filename = (this.m_os == "win32") ? "GhostWebService-windows-" + info.BuildDate + ".exe" :
                     `GhostWebService-${this.m_os}-${info.BuildDate}`;
                 this.m_gwsPath = filename

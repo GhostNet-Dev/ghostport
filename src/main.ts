@@ -7,10 +7,12 @@ import * as path from "path";
 import { GetPublicIp } from "./libs/getpublicip";
 import { FileInfo } from "./models/param.js";
 import { RunTimeSync } from './common/runtimesync';
+import { Logger } from "./models/logger";
 
 let window: BrowserWindow;
 let g_ip: string;
 
+const g_logger = new Logger()
 const g_sync = new RunTimeSync(1000 * 60)
 GetPublicIp((ip: string) => {
   console.log(ip);
@@ -44,6 +46,9 @@ app.on("ready", () => {
     })
   })
 
+  ipcMain.on('getLog', (evt, type: string) => {
+    evt.reply('reply_getLog_' + type, g_logger.GetLogs(type));
+  })
   ipcMain.on('executeProcess', (evt, gwsPath: string, id: string, pw: string, port: string) => {
     if (gwsprocess.CheckRunning() == true) {
       return;
@@ -51,8 +56,10 @@ app.on("ready", () => {
     gwsprocess.ExecuteProcess(gwsPath, id, pw, g_ip, port, "58080", (code: number) => {
       window.webContents.send('executeProcessExit', true);
     }, (data: any) => {
+      g_logger.AddLog("stdout", data)
       window.webContents.send('gwsout', data);
     }, (data: any) => {
+      g_logger.AddLog("stderr", data)
       window.webContents.send('gwserr', data);
     })
     g_sync.MonitoringStart()

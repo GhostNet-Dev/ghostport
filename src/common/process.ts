@@ -42,10 +42,10 @@ export const CreateAccount = (gwsPath: string, id: string, pw: string,
         callback();
     })
     gws.stdout.on('data', data => {
-        console.log(`child stdout: ${data}`);
+        console.log(`stdout: ${data}`);
     })
     gws.stderr.on('data', data => {
-        console.log(`child stderr: ${data}`);
+        console.log(`stderr: ${data}`);
     })
 }
 

@@ -1,0 +1,76 @@
+<div class="container-fluid p-4">
+    <div class="row">
+        <div class="col">
+            <h5>Log Collection</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logdefault">
+                <label class="form-check-label" for="logdefault">
+                    Default Module
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logblockconsensus">
+                <label class="form-check-label" for="logblockconsensus">
+                    Block Consensus Module
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logmasterlist">
+                <label class="form-check-label" for="logmasterlist">
+                    Master List Module
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logforwardingtrace">
+                <label class="form-check-label" for="logforwardingtrace">
+                    Forwarding Trace Module
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logpacketlog">
+                <label class="form-check-label" for="logpacketlog">
+                    PacketLog Module
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="logfileservice">
+                <label class="form-check-label" for="logfileservice">
+                    Fileservice Module
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row py-3">
+        <div class="col">
+            <h5>Log</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <nav class="nav nav-pills nav-justified">
+                <button class="nav-link active" id="out-tab" data-bs-toggle="tab" role="tab"
+                    data-bs-target="#outview" aria-controls="outview">
+                    <h5>Output</h5>
+                </button>
+                <button class="nav-link" id="err-tab" data-bs-toggle="tab" role="tab"
+                 data-bs-target="#errview" aria-controls="errview">
+                    <h5>Error</h5>
+                </button>
+            </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="outview" role="tabpanel" aria-labelledby="out-tab">
+                </div>
+                <div class="tab-pane fade" id="errview" role="tabpanel" aria-labelledby="err-tab">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

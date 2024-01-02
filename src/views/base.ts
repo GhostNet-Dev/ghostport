@@ -23,7 +23,7 @@ export class Base {
             ["chat", ["chat"]],
             ["blockscan", ["blockscan", "blockdetail", "txdetail", "accountdetail"]],
             ["chat", [""]],
-            ["account", [""]]])
+            ["setup", ["setup"]]])
         this.urlToFileMap = {
             "main": basePath + "layouts/main.html",
             "login": basePath + "layouts/login.html",
@@ -32,6 +32,7 @@ export class Base {
             "chat": basePath + "layouts/llama.html",
             "gscript": basePath + "layouts/gscript.html",
             "nft": basePath + "layouts/nft.html",
+            "setup": basePath + "layouts/setup.html",
             "prompt": "http://ghostwebservice.com/ghostnetservice/warning.html",
             "download": "http://ghostwebservice.com/ghostnetservice/download.html",
             "txdetail": "http://ghostwebservice.com/ghostnetservice/txdetail.html",
@@ -101,6 +102,7 @@ export class Base {
     public loadNodesHtml(node: GhostWebUser) {
         window.MasterNode = node;
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
+        window.AdminAddr = `http://${window.location.hostname}:58081`;
         this.m_blockStore.MasterAddr = window.MasterAddr
         return window.MasterAddr;
     };

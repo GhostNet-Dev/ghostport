@@ -10,11 +10,13 @@ import { GetPublicIp } from "./libs/getpublicip";
 import { LocalSession } from "./web/session";
 import { FileInfo } from "./models/param.js";
 import { RunTimeSync } from './common/runtimesync';
+import { Logger } from './models/logger';
 
 const mime = require('mime');
 const WebSocketServer = require('ws');
 let g_ip: string;
 
+const g_logger = new Logger()
 const g_session = new LocalSession();
 const g_sync = new RunTimeSync(1000 * 60)
 
@@ -58,6 +60,9 @@ const g_handler: Handler = {
             ws.send(JSON.stringify({ types: "reply_download", params: ret }));
         });
     },
+    "getLog": (ws: any, type: string) => {
+        ws.send(JSON.stringify({ types: "reply_getLog_" + type, params: g_logger.GetLogs(type) }))
+    },
     "executeProcess": (ws: any, gwsPath: string, id: string, pw: string, port: string) => {
         console.log(id, pw)
         if (gwsprocess.CheckRunning() == true && !g_session.CheckSession(id, pw)) {
@@ -69,10 +74,12 @@ const g_handler: Handler = {
             g_session.Clear();
             ws.send(JSON.stringify({ types: "executeProcessExit", params: true }));
         }, (data: any) => {
-            console.log(`child stdout: ${data}`);
+            console.log(`stdout: ${data.slice(0, -1)}`);
+            g_logger.AddLog("stdout", data.toString())
             ws.send(JSON.stringify({ types: "gwsout", params: data }));
         }, (data: any) => {
-            console.log(`child stderr: ${data}`);
+            console.log(`stderr: ${data.slice(0, -1)}`);
+            g_logger.AddLog("stderr", data.toString())
             ws.send(JSON.stringify({ types: "gwserr", params: data }));
         })
         g_sync.MonitoringStart()
