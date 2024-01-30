@@ -104,6 +104,7 @@ export class Base {
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
         window.AdminAddr = `http://${window.location.hostname}:58081`;
         this.m_blockStore.MasterAddr = window.MasterAddr
+        this.m_blockStore.AdminAddr = window.AdminAddr
         return window.MasterAddr;
     };
     public includeHTML(id: string, filename: string) {

@@ -39,7 +39,7 @@ export class GScript {
     }
     registerScript() {
         const tag = document.getElementById("blackbox") as HTMLDivElement
-        fetch(`${this.m_blockStore.MasterAddr}/newscript`, {
+        fetch(`${this.m_blockStore.AdminAddr}/newscript`, {
             method: "POST",
             body: tag.innerHTML,
         }).then(res => {

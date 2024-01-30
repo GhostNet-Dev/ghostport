@@ -14,6 +14,7 @@ export class BlockStore {
     m_ip: string;
     m_os: string;
     m_masterAddr: string
+    m_adminAddr: string
 
     public constructor() {
         this.m_minBlockId = MaxUnsignedInt
@@ -22,6 +23,7 @@ export class BlockStore {
         this.m_masterNodes = new Array<GhostWebUser>()
         this.m_os = this.m_ip = this.m_gwsFilename = ""
         this.m_masterAddr = window.MasterAddr
+        this.m_adminAddr = window.AdminAddr
     }
 
     public SetDeviceInfo(ip: string, os: string) { 
@@ -45,7 +47,13 @@ export class BlockStore {
     }
     public GetMasters() :GhostWebUser[] {
         return this.m_masterNodes;
-    } 
+    }  
+    public set AdminAddr(addr: string) {
+        this.m_adminAddr = addr
+    }
+    public get AdminAddr() {
+        return this.m_adminAddr
+    }
     public set MasterAddr(addr: string) {
         this.m_masterAddr = addr
     }
