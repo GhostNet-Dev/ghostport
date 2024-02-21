@@ -1,0 +1,25 @@
+FROM ghostwebservice/base
+
+############ nodejs
+RUN mkdir /etc/apt/keyrings -p
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg 
+ENV NODE_MAJOR=20
+
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN apt-get update && apt-get install nodejs -y
+
+
+# Build the project.
+WORKDIR /usr/src/app
+ENV NODE_ENV=development
+#RUN go build main.go
+
+#ARG DISABLE_CACHE
+#ENV DISABLE_CACHE $DISABLE_CACHE
+RUN git clone https://github.com/GhostNet-Dev/ghoststudio.git && cd ghoststudio && \ 
+	npm i -D typescript && npm install -g
+
+
+WORKDIR /usr/src/app/ghoststudio
+ENV NODE_ENV=production
+CMD ["npm", "run", "docker"]
