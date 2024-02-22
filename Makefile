@@ -21,11 +21,13 @@ cuda_volume:
 	docker volume create --name ghost_cuda
 
 cuda_build:
-	docker build . -t ghost_cuda --build-arg -f Dockerfile.cuda
+	docker build . -t ghost_cuda -f Dockerfile.cuda
 
 cuda_run:
-	docker run -it --rm --name ghostd_cuda  -v ghost_cuda:/usr/src/app --net=host -p 8090:8090 -p 8091:8091 -p 50129:50129/udp -p 58080:58080 ghost_cuda
+	docker run -it --rm --gpus all --name ghostd_cuda  -v ghost_cuda:/usr/src/app --net=host -p 8090:8090 -p 8091:8091 -p 50129:50129/udp -p 58080:58080 ghost_cuda
 
+conn:
+	docker exec -t -i ghostd_cuda /bin/bash
 
 docker_clean:
 	docker system prune --volumes
