@@ -66,6 +66,7 @@ export class Session {
             this.m_id, this.m_pw, port);
 
         this.m_blockStore.MasterAddr = "http://" + location.hostname + ":58080"
+        console.log(this.m_blockStore.MasterAddr)
         this.m_blockStore.RequestAccountbyNick(id)
             .then((res) => this.m_rawPubKey = res)
             .then(() => {

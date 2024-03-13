@@ -5,16 +5,13 @@ import { GhostWebUser } from "../models/param.js";
 type UrlMap = { [key: string]: string; }
 
 export class Base {
-    m_basePath: string
     menuList: Map<string, string[]>
     urlToFileMap: UrlMap
     beforPage: string
-    funcMap: FuncMap
-    m_blockStore: BlockStore
-    m_session: Session
 
-    constructor(basePath: string, funcMap: FuncMap, blockStore: BlockStore, session: Session) {
-        this.m_basePath = basePath
+    constructor(private basePath: string, private funcMap: FuncMap, 
+        private blockStore: BlockStore, private session: Session) {
+        this.basePath = basePath
         this.menuList = new Map([
             ["dashboard", ["main", "login", "dashboard"]],
             ["nft", ["nft"]],
@@ -42,8 +39,8 @@ export class Base {
         };
         this.beforPage = ""
         this.funcMap = funcMap
-        this.m_blockStore = blockStore
-        this.m_session = session
+        this.blockStore = blockStore
+        this.session = session
     }
     getPageIdParam() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -93,7 +90,7 @@ export class Base {
 
     public parseResponse(nodes: GhostWebUser[]) {
         let randIdx = Math.floor(Math.random() * nodes.length);
-        this.m_blockStore.AddMasters(nodes);
+        this.blockStore.AddMasters(nodes);
         window.NodeCount = nodes.length;
         console.log(nodes);
         return nodes[randIdx];
@@ -102,9 +99,9 @@ export class Base {
     public loadNodesHtml(node: GhostWebUser) {
         window.MasterNode = node;
         window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
-        window.AdminAddr = `http://${window.location.hostname}:58081`;
-        this.m_blockStore.MasterAddr = window.MasterAddr
-        this.m_blockStore.AdminAddr = window.AdminAddr
+        window.AdminAddr = `http://${window.location.hostname}:58080`; // TODO Change to 58081
+        this.blockStore.MasterAddr = window.MasterAddr
+        this.blockStore.AdminAddr = window.AdminAddr
         return window.MasterAddr;
     };
     public includeHTML(id: string, filename: string) {

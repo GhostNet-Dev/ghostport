@@ -4,6 +4,7 @@ declare global {
     interface Window {
         ClickLoadPage: (key: string, from: boolean, ...arg: string[]) => void;
         MasterAddr: string;
+        AdminMasterAddr: string;
         AdminAddr: string;
         MasterNode: GhostWebUser;
         NodeCount: number;
